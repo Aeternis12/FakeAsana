@@ -13,9 +13,11 @@ namespace Asana.Library.Model
         public int? Priority { get; set; } 
         public bool? IsCompleted { get; set; }
 
+        public int Id { get; set; }
+
         public override string ToString()
         {
-            return $"{Name} - {Description}";
+            return $"[{Id}] {Name} - {Description}";
         }
     }
 }
