@@ -235,7 +235,7 @@ namespace Asana
         }
         public static void MarkToDoAsCompleted()
         {
-            ListAllToDo();
+            ListAllOutstandingToDo();
             Console.Write("Which ToDo is complete: ");
             var toDoCompleteId = int.Parse(Console.ReadLine() ?? "0");
             var toDoToComplete = toDos.FirstOrDefault(t => t.Id == toDoCompleteId);
