@@ -17,7 +17,7 @@ namespace Asana.Library.Model
 
         public override string ToString()
         {
-            return $"[{Id}] {Name ?? " "} - {Description ?? " "} - {Priority}";
+            return $"[{Id}] {Name ?? " "} - {Description ?? " "}";
         }
     }
 }
