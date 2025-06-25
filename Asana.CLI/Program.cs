@@ -1,6 +1,7 @@
 ﻿using Asana.Library.Model;
 using Asana.Library.Services;
 using System;
+using System.ComponentModel.DataAnnotations;
 
 namespace Asana
 {
@@ -13,7 +14,6 @@ namespace Asana
         {
             var toDoSvc = ToDoServiceProxy.Current;
             int choiceInt;
-            var itemCount = 0;
             do
             {
                 PrintMenu();
@@ -29,7 +29,7 @@ namespace Asana
                             Console.Write("Description: ");
                             var description = Console.ReadLine();
 
-                            toDoSvc.CreateToDo(new ToDo
+                            toDoSvc.AddOrUpdate(new ToDo
                             {
                                 Name = name,
                                 Description = description,
@@ -44,10 +44,28 @@ namespace Asana
                             toDoSvc.DisplayToDo();
                             break;
                         case 4:
-                            toDoSvc.DeleteToDo();
+                            toDoSvc.DisplayToDo();
+                            Console.Write("ToDo to Delete: ");
+                            var toDoChoice4 = int.Parse(Console.ReadLine() ?? "0");
+
+                            var reference = toDoSvc.GetById(toDoChoice4);
+                            toDoSvc.DeleteToDo(reference);
                             break;
                         case 5:
-                            toDoSvc.UpdateToDo();
+                            toDoSvc.DisplayToDo(true);
+                            Console.Write("ToDo to Update: ");
+                            var toDoChoice5 = int.Parse(Console.ReadLine() ?? "0");
+                            var updateReference = toDoSvc.GetById(toDoChoice5);
+
+                            if (updateReference != null)
+                            {
+                                Console.Write("Name: ");
+                                updateReference.Name = Console.ReadLine();
+                                Console.Write("Description: ");
+                                updateReference.Description = Console.ReadLine();
+
+                            }
+                            toDoSvc.AddOrUpdate(updateReference);
                             break;
                         case 6:
                             Console.WriteLine("Exiting the application...");

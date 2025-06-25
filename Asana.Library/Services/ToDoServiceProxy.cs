@@ -42,9 +42,15 @@ namespace Asana.Library.Services
                 return instance;
             }
         }
-        public void CreateToDo(ToDo toDo)
+
+        public ToDo? GetById(int id)
         {
-            if(toDo.Id == 0)
+            return toDos.FirstOrDefault(t => t.Id == id);
+        }
+
+        public void AddOrUpdate(ToDo? toDo)
+        {
+            if(toDo != null && toDo.Id == 0)
             {
                 toDo.Id = nextKey;
                 toDos.Add(toDo);
@@ -65,34 +71,14 @@ namespace Asana.Library.Services
             }
         }
 
-        public void DeleteToDo()
+        public void DeleteToDo(ToDo? toDo)
         {
-            toDos.ForEach(Console.WriteLine);
-            Console.Write("ToDo to Delete: ");
-            var toDoChoice = int.Parse(Console.ReadLine() ?? "0");
-
-            var reference = toDos.FirstOrDefault(t => t.Id == toDoChoice);
-            if (reference != null)
+           
+            if (toDo == null)
             {
-                toDos.Remove(reference);
+                return;
             }
-        }
-
-        public void UpdateToDo()
-        {
-            toDos.ForEach(Console.WriteLine);
-            Console.Write("ToDo to Update: ");
-            var toDoChoice = int.Parse(Console.ReadLine() ?? "0");
-            var updateReference = toDos.FirstOrDefault(t => t.Id == toDoChoice);
-
-            if (updateReference != null)
-            {
-                Console.Write("Name: ");
-                updateReference.Name = Console.ReadLine();
-                Console.Write("Description: ");
-                updateReference.Description = Console.ReadLine();
-
-            }
+            toDos.Remove(toDo);
         }
     }
 }
