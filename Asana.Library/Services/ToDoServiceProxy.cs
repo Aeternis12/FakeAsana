@@ -75,7 +75,7 @@ namespace Asana.Library.Services
             if(toDo != null && toDo.Id == 0)
             {
                 toDo.Id = nextKey;
-                ToDos.Add(toDo);
+                _toDoList.Add(toDo);
             }
         }
 
