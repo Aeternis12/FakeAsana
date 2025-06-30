@@ -11,8 +11,6 @@ namespace Asana.Maui
             InitializeComponent();
             BindingContext = new MainPageViewModel();
         }
-
-        
     }
 
 }
