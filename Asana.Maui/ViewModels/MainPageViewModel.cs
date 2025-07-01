@@ -55,6 +55,17 @@ namespace Asana.Maui.ViewModels
             }
         }
 
+        public void DeleteToDo()
+        {
+            if(SelectedToDo == null)
+            {
+                return;
+            }
+
+            ToDoServiceProxy.Current.DeleteToDo(SelectedToDo);
+            NotifyPropertyChanged(nameof(ToDos));
+        }
+
         public void RefreshPage()
         {
             NotifyPropertyChanged(nameof(ToDos));

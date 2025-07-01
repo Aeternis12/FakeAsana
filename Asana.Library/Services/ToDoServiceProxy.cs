@@ -102,7 +102,7 @@ namespace Asana.Library.Services
             {
                 return;
             }
-                ToDos.Remove(toDo);
+            _toDoList.Remove(toDo);
         }
     }
 }
