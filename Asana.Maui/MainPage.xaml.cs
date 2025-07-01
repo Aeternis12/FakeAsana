@@ -1,4 +1,5 @@
-﻿using Asana.Maui.ViewModels;
+﻿using Asana.Library.Model;
+using Asana.Maui.ViewModels;
 
 namespace Asana.Maui
 {
@@ -16,6 +17,12 @@ namespace Asana.Maui
         {
             Shell.Current.GoToAsync("//ToDoDetails");
         }
+        private void EditClicked(object sender, EventArgs e)
+        {
+
+            var selectedId = (BindingContext as MainPageViewModel)?.SelectedToDoId ?? 0;
+            Shell.Current.GoToAsync($"//ToDoDetails?toDoId={selectedId}");
+        }
 
         private void ContentPage_NavigatedTo(object sender, NavigatedToEventArgs e)
         {
@@ -26,6 +33,9 @@ namespace Asana.Maui
         {
 
         }
+
+
+       
     }
 
 }
