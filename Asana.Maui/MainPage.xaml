@@ -28,7 +28,8 @@
                 <!-- ToDo List -->
                 <ListView
                 Grid.Row="1"
-                ItemsSource="{Binding ToDos}">
+                ItemsSource="{Binding ToDos}"
+                SelectedItem="{Binding SelectedToDo}">
                     <ListView.ItemTemplate>
                         <DataTemplate>
                             <ViewCell>
@@ -55,10 +56,11 @@
                     </ListView.ItemTemplate>
                 </ListView>
                 <!-- Button Bar -->
-                <Grid Grid.Row="2">
+                <VerticalStackLayout Grid.Row="2">
                     <Button Text="Add New ToDo" Clicked="AddNewClicked"/>
+                    <Button Text="Edit Selected ToDo" Clicked="EditClicked"/>
 
-                </Grid>
+                </VerticalStackLayout>
             </Grid>
         </VerticalStackLayout>
     </ScrollView>
