@@ -27,6 +27,10 @@ namespace Asana.Maui
         {
             (BindingContext as MainPageViewModel)?.DeleteToDo();
         }
+        private void InLineDeleteClicked(object sender, EventArgs e)
+        {
+            (BindingContext as MainPageViewModel)?.RefreshPage();
+        }
 
         private void ContentPage_NavigatedTo(object sender, NavigatedToEventArgs e)
         {
