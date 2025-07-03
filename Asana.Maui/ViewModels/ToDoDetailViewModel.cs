@@ -14,25 +14,6 @@ namespace Asana.Maui.ViewModels
         public ToDoDetailViewModel() {
             Model = new ToDo(); 
         }
-
-        public ToDoDetailViewModel(int id)
-        {
-            Model = ToDoServiceProxy.Current.GetById(id) ?? new ToDo();
-            DeleteCommand = new Command(DoDelete);
-        }
-
-        public ToDoDetailViewModel(ToDo? model)
-        {
-            Model = model ?? new ToDo();
-            DeleteCommand = new Command(DoDelete);
-        }
-
-        public void DoDelete()
-        {
-            ToDoServiceProxy.Current.DeleteToDo(Model);
-        }
-
-
         public ToDo? Model { get; set; }
 
         public ICommand? DeleteCommand { get; set; }
@@ -44,7 +25,6 @@ namespace Asana.Maui.ViewModels
                 return new List<int> { 1, 2, 3, 4 };
             }
         }
-
         public int SelectedPriority
         {
             get
@@ -60,10 +40,30 @@ namespace Asana.Maui.ViewModels
             }
         }
 
+        public ToDoDetailViewModel(int id)
+        {
+            Model = ToDoServiceProxy.Current.GetById(id) ?? new ToDo();
+            DeleteCommand = new Command(DoDelete);
+        }
+
+        public ToDoDetailViewModel(ToDo? model)
+        {
+            Model = model ?? new ToDo();
+            DeleteCommand = new Command(DoDelete);
+        }
         public void AddOrUpdateToDo()
         {
             ToDoServiceProxy.Current.AddOrUpdate(Model);
         }
+
+        public void DoDelete()
+        {
+            ToDoServiceProxy.Current.DeleteToDo(Model?.Id ?? 0);
+        }
+
+
+
+
 
         
     }
