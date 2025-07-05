@@ -9,34 +9,67 @@
         <Grid>
             <Grid.ColumnDefinitions>
                 <ColumnDefinition/>
-                <ColumnDefinition Width="5*"/>
-                <ColumnDefinition/>
-                <ColumnDefinition Width="5*"/>
+                <ColumnDefinition Width="4*"/>
+                <ColumnDefinition Width="12*"/>
             </Grid.ColumnDefinitions>
-            <Label Text="ID: " Grid.Column="0"/>
-            <Entry Text="{Binding Model.Id}" Grid.Column="1" IsReadOnly="True"/>
-            <Label Text="Name : " Grid.Column="2"/>
-            <Entry Text="{Binding Model.Name}" Grid.Column="3"/>
+            <Label Text="Project: " Grid.Column="0"/>
+            <Picker ItemsSource="{Binding Projects}"
+                    SelectedItem="{Binding SelectedProject}" Grid.Column="1"/>
         </Grid>
         <Grid>
             <Grid.ColumnDefinitions>
                 <ColumnDefinition/>
-                <ColumnDefinition/>
-                <ColumnDefinition Width="7*"/>
+                <ColumnDefinition Width="4*"/>
+                <ColumnDefinition Width="12*"/>
             </Grid.ColumnDefinitions>
-
-            <CheckBox IsChecked="{Binding Model.IsCompleted}" Grid.Column="0"/>
-            <Label Text="Priority: " Grid.Column="1"/>
+            <Grid.RowDefinitions>
+                <RowDefinition/>
+                <RowDefinition/>
+            </Grid.RowDefinitions>
+            <Label Text="ID: " Grid.Column="0" Grid.Row="0"/>
+            <Entry Text="{Binding Model.Id}" Grid.Column="1" Grid.Row="0" IsReadOnly="True"/>
+            <Label Text="Name : " Grid.Column="0" Grid.Row="1"/>
+            <Entry Text="{Binding Model.Name}" Grid.Column="1" Grid.Row="1"/>
+        </Grid>
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition/>
+                <ColumnDefinition Width="4*"/>
+                <ColumnDefinition Width="12*"/>
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition/>
+                <RowDefinition/>
+            </Grid.RowDefinitions>
+            <Label Text="Description: " Grid.Column="0" Grid.Row="0"/>
+            <Entry Text="{Binding Model.Description}" Grid.Column="1" Grid.Row="0"/>
+        </Grid>
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition/>
+                <ColumnDefinition Width="4*"/>
+                <ColumnDefinition Width="12*"/>
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition/>
+                <RowDefinition/>
+            </Grid.RowDefinitions>
+            <Label Text="Is ToDo Complete: " Grid.Column="0" Grid.Row="1"/>
+            <CheckBox IsChecked="{Binding Model.IsCompleted}" Grid.Column="1" Grid.Row="1"/>
+            <Label Text="Priority: " Grid.Column="0" Grid.Row="0"/>
             <Picker ItemsSource="{Binding Priorities}"
-                    SelectedItem="{Binding SelectedPriority}" Grid.Column="2"/>
+                    SelectedItem="{Binding SelectedPriority}" Grid.Column="1" Grid.Row="0"/>
         </Grid>
         <Grid>
             <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="0.35*"/>
+                <ColumnDefinition Width=".6*"/>
                 <ColumnDefinition/>
-                <ColumnDefinition Width="8*"/>
+                <ColumnDefinition Width="4*"/>
             </Grid.ColumnDefinitions>
-            <Label Text="Description: " Grid.Column="0"/>
-            <Entry Text="{Binding Model.Description}" Grid.Column="1"/>
+            <Label Text="Due Date: " Grid.Column="0"/>
+            <DatePicker Date="{Binding DueDate}" Grid.Column="1"/>
+            <TimePicker Time="{Binding DueTime}" Grid.Column="2"/>  
         </Grid>
         <Button Text="Ok" Clicked="OkClicked"/>
         <Button Text="Cancel" Clicked="CancelClicked"/>

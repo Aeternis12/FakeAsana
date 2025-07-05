@@ -5,7 +5,7 @@ namespace Asana.Maui
 {
     public partial class MainPage : ContentPage
     {
-        int count = 0;
+        //int count = 0;
 
         public MainPage()
         {
@@ -19,7 +19,6 @@ namespace Asana.Maui
         }
         private void EditClicked(object sender, EventArgs e)
         {
-
             var selectedId = (BindingContext as MainPageViewModel)?.SelectedToDoId ?? 0;
             Shell.Current.GoToAsync($"//ToDoDetails?toDoId={selectedId}");
         }
@@ -32,6 +31,12 @@ namespace Asana.Maui
             (BindingContext as MainPageViewModel)?.RefreshPage();
         }
 
+
+        private void ProjectClicked(object sender, EventArgs e)
+        {
+            Shell.Current.GoToAsync("//ProjectsPage");
+        }
+       
         private void ContentPage_NavigatedTo(object sender, NavigatedToEventArgs e)
         {
             (BindingContext as MainPageViewModel)?.RefreshPage();
@@ -41,7 +46,6 @@ namespace Asana.Maui
         {
 
         }
-
     }
 
 }

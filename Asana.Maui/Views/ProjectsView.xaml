@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="Asana.Maui.Views.ProjectsView"
+             Title="ProjectsView"
+             NavigatedFrom="ContentPage_NavigatedFrom"
+             NavigatedTo="ContentPage_NavigatedTo"
+             >
+    <VerticalStackLayout
+        Padding="30,0"
+        Spacing="25">
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+                <!-- Project List -->
+                <ListView
+                    Grid.Row="0"
+                    ItemsSource="{Binding Projects}"
+                    SelectedItem="{Binding SelectedProject}"
+                    >
+                    <ListView.ItemTemplate>
+                        <DataTemplate>
+                            <ViewCell>
+                                <Grid>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition/>
+                                        <ColumnDefinition/>
+                                        <ColumnDefinition Width="10*"/>
+                                        <ColumnDefinition/>
+                                    </Grid.ColumnDefinitions>
+                                    <Label Grid.Column="0" Text="{Binding Model.Id}"/>
+                                    <Grid Grid.Column="1">
+                                        <Grid.RowDefinitions>
+                                            <RowDefinition/>
+                                            <RowDefinition/>
+                                            <RowDefinition/>
+                                        </Grid.RowDefinitions>
+                                        <Label FontAttributes="Bold" FontSize="Title" TextColor="Green" Grid.Row="0" Text="{Binding Model.Name}"/>
+                                        <Label Grid.Row="1" Text="{Binding Model.Description}"/>
+                                    
+                                </Grid>
+                                    <Label Grid.Column="2"  TextColor="Red" FontSize="Title" Text="{Binding Model.CompletePercent, StringFormat='{}{0} %'}"/>
+                                <Button Grid.Column="3" Text="Delete" Clicked="InLineDeleteClicked" Command="{Binding DeleteCommand} "/>
+                                </Grid>
+                            </ViewCell>
+                        </DataTemplate>
+                    </ListView.ItemTemplate>
+                </ListView>
+                <VerticalStackLayout Grid.Row="1">
+                    <Button Text="Add New Project" Clicked="AddClicked"/>
+                    <Button Text="Edit Selected Project" Clicked="EditClicked"/>
+                    <Button Text="Delete Selected Project" Clicked="DeleteClicked"/>
+                    <Button Text="Manage ToDos In Project" Clicked="ToDosInProjectClicked"/>
+                </VerticalStackLayout>
+        </Grid>
+        <Button Text="Cancel" Clicked="CancelClicked"/>
+    </VerticalStackLayout>
+</ContentPage>
