@@ -12,7 +12,8 @@ namespace Asana.Maui.ViewModels
 {
     public class ToDoDetailViewModel : INotifyPropertyChanged
     {
-        public ToDoDetailViewModel() {
+        public ToDoDetailViewModel()
+        {
             Model = new ToDo();
             Projects = ProjectServiceProxy.Current.Projects.ToList();
         }
@@ -32,14 +33,14 @@ namespace Asana.Maui.ViewModels
         }
 
         public List<Project> Projects { get; } = new List<Project>();
-        
+
         public Project? SelectedProject
         {
             get => Projects.FirstOrDefault(p => p.Id == Model?.ProjectId);
 
             set
             {
-                if(Model != null && value != null)
+                if (Model != null && value != null)
                 {
                     Model.ProjectId = value.Id;
                 }
@@ -54,7 +55,6 @@ namespace Asana.Maui.ViewModels
 
 
 
-
         public ToDo? Model { get; set; }
 
         public ICommand? DeleteCommand { get; set; }
@@ -66,6 +66,7 @@ namespace Asana.Maui.ViewModels
                 return new List<int> { 1, 2, 3, 4 };
             }
         }
+
         public int SelectedPriority
         {
             get
@@ -74,24 +75,13 @@ namespace Asana.Maui.ViewModels
             }
             set
             {
-                if(Model != null && Model.Priority != value)
+                if (Model != null && Model.Priority != value)
                 {
                     Model.Priority = value;
                 }
             }
         }
 
-        public ToDoDetailViewModel(int id)
-        {
-            Model = ToDoServiceProxy.Current.GetById(id) ?? new ToDo();
-            DeleteCommand = new Command(DoDelete);
-        }
-
-        public ToDoDetailViewModel(ToDo? model)
-        {
-            Model = model ?? new ToDo();
-            DeleteCommand = new Command(DoDelete);
-        }
         public void AddOrUpdateToDo()
         {
             ToDoServiceProxy.Current.AddOrUpdate(Model);
@@ -130,6 +120,5 @@ namespace Asana.Maui.ViewModels
         public event PropertyChangedEventHandler? PropertyChanged;
         protected void OnPropertyChanged(string propertyName) =>
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
-
     }
 }
