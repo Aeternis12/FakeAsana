@@ -12,7 +12,7 @@ using System.Threading.Tasks;
 
 namespace Asana.Maui.ViewModels
 {
-    public class ToDosInProjectViewModel :INotifyPropertyChanged
+    public class ToDosInProjectViewModel : INotifyPropertyChanged
     {
         public Project? SelectedProject { get; set; }
         public ObservableCollection<ToDo> ToDos { get; set; }
