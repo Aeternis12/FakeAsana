@@ -11,7 +11,7 @@ using System.Threading.Tasks;
 
 namespace Asana.Maui.ViewModels
 {
-    public class MainPageViewModel: INotifyPropertyChanged
+    public class MainPageViewModel : INotifyPropertyChanged
     {
         private ToDoServiceProxy _toDoSvc;
 
@@ -37,9 +37,9 @@ namespace Asana.Maui.ViewModels
         }
 
         public int? SelectedToDoId => SelectedToDo?.Model?.Id ?? 0;
-        
+
         private bool isShowCompleted;
-        
+
         public bool IsShowCompleted
         {
             get
@@ -58,12 +58,12 @@ namespace Asana.Maui.ViewModels
 
         public void DeleteToDo()
         {
-            if(SelectedToDo == null)
+            if (SelectedToDo == null)
             {
                 return;
             }
 
-            ToDoServiceProxy.Current.DeleteToDo(SelectedToDo?.Model?.Id ?? 0);
+            ToDoServiceProxy.Current.DeleteToDo(SelectedToDo.Model);
             NotifyPropertyChanged(nameof(ToDos));
         }
 
