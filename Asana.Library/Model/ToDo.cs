@@ -19,6 +19,8 @@ namespace Asana.Library.Model
         public int? Priority { get; set; } 
         public bool? IsCompleted { get; set; }
         public int Id { get; set; }
+        public int ProjectId { get; set; }
+        public DateTime? DueDate { get; set; }
 
         public override string ToString()
         {

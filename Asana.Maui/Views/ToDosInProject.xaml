@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="Asana.Maui.Views.ToDosInProject"
+             Title="ToDosInProject"
+             NavigatedTo="ContentPage_NavigatedTo"
+             NavigatedFrom="ContentPage_NavigatedFrom">
+    <ScrollView>
+        <VerticalStackLayout
+            Padding="30,0"
+            Spacing="25">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition/>
+                    <RowDefinition Height="10*"/>
+                    <RowDefinition Height="10*"/>
+                </Grid.RowDefinitions>
+                <!--Tool Bar -->
+                <Grid Grid.Row="0">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition/>
+                        <ColumnDefinition Width="11*"/>
+                    </Grid.ColumnDefinitions>
+                    <Label Grid.Column="0" Text="Show Completed Tasks:"/>
+                    <CheckBox Margin="5" Grid.Column="1" IsChecked="{Binding IsShowCompleted}" />
+                </Grid>
+                <!-- ToDo List -->
+                <CollectionView
+                    Grid.Row="1"
+                    ItemsSource="{Binding ToDos}"
+                    SelectionMode="Single"
+                    SelectedItem="{Binding SelectedToDo}">
+                    <CollectionView.ItemTemplate>
+                        <DataTemplate>
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="5*"/>
+                                </Grid.ColumnDefinitions>
+                                <Grid Grid.Column="1">
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition/>
+                                        <RowDefinition/>
+                                        <RowDefinition/>
+                                    </Grid.RowDefinitions>
+                                    <Label Grid.Row="0" Text="{Binding Name}" TextColor="Red" FontAttributes="Bold"/>
+                                    <Label Grid.Row="1" Text="{Binding Description}" />
+                                    <HorizontalStackLayout Grid.Row="2" Spacing="5">
+                                        <Label Text="Due:"/>
+                                        <Label Text="{Binding Model.DueDate}"/>
+                                    </HorizontalStackLayout>
+                                </Grid>
+                            </Grid>
+                        </DataTemplate>
+                    </CollectionView.ItemTemplate>
+                </CollectionView>
+                <VerticalStackLayout Grid.Row="2">
+                    <Button Text="Add New ToDo" Clicked="AddNewClicked"/>
+                    <Button Text="Edit Selected ToDo" Clicked="EditClicked"/>
+                    <Button Text="Delete Selected ToDo" Clicked="DeleteClicked"/>
+                </VerticalStackLayout>
+            </Grid>
+            <Button Text="Cancel" Clicked="CancelClicked"/>
+        </VerticalStackLayout>
+    </ScrollView>
+</ContentPage>

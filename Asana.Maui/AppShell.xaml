@@ -13,8 +13,20 @@
         ContentTemplate="{DataTemplate local:MainPage}"
         Route="MainPage" />
     <ShellContent
+        Title="Projects"
+        ContentTemplate="{DataTemplate views:ProjectsView}"
+        Route="ProjectsPage"/>
+    <ShellContent
         Title="ToDo Details"
         ContentTemplate ="{DataTemplate views:ToDoDetailView}"
         Route="ToDoDetails" />
+    <ShellContent
+        Title="Project Details"
+        ContentTemplate="{DataTemplate views:ProjectDetailView}"
+        Route="ProjectDetails" />
+    <ShellContent
+        Title="ToDos in Project"
+        ContentTemplate="{DataTemplate views:ToDosInProject}"
+        Route="ToDosInProject"/>
 
 </Shell>

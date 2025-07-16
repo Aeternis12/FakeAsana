@@ -12,42 +12,37 @@ namespace Asana.Library.Services
     public class ToDoServiceProxy
     {
 
-        private List<ToDo> _toDoList;
+       
         public List<ToDo> ToDos
         {
             get
             {
-                return _toDoList.Take(100).ToList();
+                return ProjectServiceProxy.Current.Projects.SelectMany(p => p.ToDos).Take(100).ToList();
             }
-            private set
-            {
-                if(value != _toDoList)
-                {
-                    _toDoList = value;
-                }
-            }
+            
         }
 
         private ToDoServiceProxy() 
         {
-            /*ToDos = new List<ToDo>()
-            {
-                new ToDo { Id = 1, Name = "Task 1", Description = "My Task 1", IsCompleted = true}, 
-                new ToDo { Id = 2, Name = "Task 2", Description = "My Task 2", IsCompleted = false},
-                new ToDo { Id = 3, Name = "Task 3", Description = "My Task 3", IsCompleted = true },
-                new ToDo { Id = 4, Name = "Task 4", Description = "My Task 4", IsCompleted = false },
-                new ToDo { Id = 5, Name = "Task 5", Description = "My Task 5", IsCompleted = true },
-            };
-            */
-
-            var toDoData = new WebRequestHandler().Get("/ToDo").Result;
-            ToDos = JsonConvert.DeserializeObject<List<ToDo>>(toDoData) ?? new List<ToDo>();
+            var projects = ProjectServiceProxy.Current.Projects;
 
         }
 
         private static ToDoServiceProxy? instance;
 
-        
+        private int nextKey
+        {
+            get
+            {
+                var allToDos = ToDos;
+                if (allToDos.Any())
+                {
+                    return allToDos.Select(t => t.Id).Max() + 1;
+                }
+                return 1;
+            }
+        }
+
 
         public static ToDoServiceProxy Current
         {
@@ -67,10 +62,15 @@ namespace Asana.Library.Services
             return ToDos.FirstOrDefault(t => t.Id == id);
         }
 
+        public List<ToDo> GetByProjectId(int projectId)
+        {
+            return ToDos.Where(t => t.ProjectId == projectId).ToList();
+        }
+
         public ToDo AddOrUpdate(ToDo? toDo)
         {
-            if(toDo == null)
-            {
+            if (toDo == null)
+
                 return toDo;
             }
             var isNewToDo = toDo.Id == 0;
@@ -88,47 +88,57 @@ namespace Asana.Library.Services
                         _toDoList.Insert(index, newToDo);
                     }
 
+            var targetProject = ProjectServiceProxy.Current.GetById(toDo.ProjectId);
+            foreach (var project in ProjectServiceProxy.Current.Projects)
+            {
+                var existing = project.ToDos.FirstOrDefault(t => t.Id == toDo.Id);
+                if (existing != null)
+                {
+                    project.ToDos.Remove(existing);
+                    ProjectServiceProxy.Current.UpdateCompletePercent(targetProject);
+                    break;
+                }
+            }
+
+            if (toDo.Id == 0)
+            {
+                toDo.Id = nextKey;
+                targetProject.ToDos.Add(toDo);
+                ProjectServiceProxy.Current.UpdateCompletePercent(targetProject);
+            }
+            else
+            {
+                var existingToDo = targetProject.ToDos.FirstOrDefault(t => t.Id == toDo.Id);
+                if (existingToDo != null)
+                {
+                    existingToDo.Description = toDo.Description;
+                    existingToDo.IsCompleted = toDo.IsCompleted;
+                    existingToDo.DueDate = toDo.DueDate;
+                    existingToDo.Priority = toDo.Priority;
                 }
                 else
                 {
-                    _toDoList.Add(newToDo);
+                    targetProject.ToDos.Add(toDo);
+                    ProjectServiceProxy.Current.UpdateCompletePercent(targetProject);
                 }
             }
             return toDo;
         }
 
-        public void DisplayToDo(bool isShowComplete = false)
-        {
-            if (isShowComplete)
-            {
-                ToDos.ForEach(Console.WriteLine);
-            }
-            else
-            {
-                ToDos.Where(t => !(t?.IsCompleted ?? false))
-                     .ToList()
-                     .ForEach(Console.WriteLine);
-            }
-        }
-
         public void DeleteToDo(int id)
         {
-           
-            if (id == 0)
+            var project = ProjectServiceProxy.Current.GetById(toDo.ProjectId);
+            if (project == null)
+            {
+                return;
+            }
+            if (toDo == null)
             {
                 return;
             }
 
-            var toDoData = new WebRequestHandler().Delete($"/ToDo/{id}").Result;
-            var toDoToDelete = JsonConvert.DeserializeObject<ToDo>(toDoData);
-            if (toDoToDelete != null)
-            {
-                var localToDo = _toDoList.FirstOrDefault(t => t.Id == toDoToDelete.Id);
-                if(localToDo != null)
-                {
-                    _toDoList.Remove(localToDo);
-                }
-            }
+            project.ToDos.Remove(toDo);
+
         }
     }
 }
