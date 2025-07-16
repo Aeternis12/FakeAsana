@@ -1,6 +1,4 @@
 ﻿using Asana.Library.Model;
-using Asana.Library.Util;
-using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,20 +10,19 @@ namespace Asana.Library.Services
     public class ToDoServiceProxy
     {
 
-       
+
         public List<ToDo> ToDos
         {
             get
             {
                 return ProjectServiceProxy.Current.Projects.SelectMany(p => p.ToDos).Take(100).ToList();
             }
-            
+
         }
 
-        private ToDoServiceProxy() 
+        private ToDoServiceProxy()
         {
             var projects = ProjectServiceProxy.Current.Projects;
-
         }
 
         private static ToDoServiceProxy? instance;
@@ -43,12 +40,11 @@ namespace Asana.Library.Services
             }
         }
 
-
         public static ToDoServiceProxy Current
         {
             get
             {
-                if(instance == null)
+                if (instance == null)
                 {
                     instance = new ToDoServiceProxy();
                 }
@@ -70,23 +66,9 @@ namespace Asana.Library.Services
         public ToDo AddOrUpdate(ToDo? toDo)
         {
             if (toDo == null)
-
+            {
                 return toDo;
             }
-            var isNewToDo = toDo.Id == 0;
-            var toDoData = new WebRequestHandler().Post("/ToDo", toDo).Result;
-            var newToDo = JsonConvert.DeserializeObject<ToDo>(toDoData);
-            if(newToDo != null)
-            {
-                if (!isNewToDo)
-                {
-                    var existingToDo = _toDoList.FirstOrDefault(t => t.Id == newToDo.Id);
-                    if(existingToDo != null)
-                    {
-                        var index = _toDoList.IndexOf(existingToDo);
-                        _toDoList.RemoveAt(index);
-                        _toDoList.Insert(index, newToDo);
-                    }
 
             var targetProject = ProjectServiceProxy.Current.GetById(toDo.ProjectId);
             foreach (var project in ProjectServiceProxy.Current.Projects)
@@ -125,7 +107,7 @@ namespace Asana.Library.Services
             return toDo;
         }
 
-        public void DeleteToDo(int id)
+        public void DeleteToDo(ToDo? toDo)
         {
             var project = ProjectServiceProxy.Current.GetById(toDo.ProjectId);
             if (project == null)
@@ -138,7 +120,6 @@ namespace Asana.Library.Services
             }
 
             project.ToDos.Remove(toDo);
-
         }
     }
 }
