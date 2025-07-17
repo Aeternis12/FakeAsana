@@ -15,12 +15,22 @@ namespace Asana.Maui.ViewModels
     public class ToDosInProjectViewModel : INotifyPropertyChanged
     {
         public Project? SelectedProject { get; set; }
-        public ObservableCollection<ToDo> ToDos { get; set; }
+        public ObservableCollection<ToDoDetailViewModel> ToDos
+        {
+            get
+            {
+                var allToDos = (SelectedProject?.ToDos ?? new List<ToDo>()).Select(t => new ToDoDetailViewModel(t));
+                if (!IsShowCompleted)
+                {
+                    allToDos = allToDos.Where(t => !(t.Model?.IsCompleted ?? false));
+                }
+                return new ObservableCollection<ToDoDetailViewModel>(allToDos);
+            }
+        }
 
         public ToDosInProjectViewModel(int projectId)
         {
             SelectedProject = ProjectServiceProxy.Current.GetById(projectId);
-            ToDos = new ObservableCollection<ToDo>(SelectedProject?.ToDos ?? new List<ToDo>());
         }
 
         public ToDoDetailViewModel? SelectedToDo { get; set; }
@@ -28,7 +38,6 @@ namespace Asana.Maui.ViewModels
         public int? SelectedToDoId => SelectedToDo?.Model?.Id ?? 0;
 
         private bool isShowCompleted;
-
         public bool IsShowCompleted
         {
             get

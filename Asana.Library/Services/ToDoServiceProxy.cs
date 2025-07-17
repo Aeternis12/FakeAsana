@@ -71,6 +71,11 @@ namespace Asana.Library.Services
             }
 
             var targetProject = ProjectServiceProxy.Current.GetById(toDo.ProjectId);
+            if (targetProject == null)
+            {
+                return toDo;
+            }
+
             foreach (var project in ProjectServiceProxy.Current.Projects)
             {
                 var existing = project.ToDos.FirstOrDefault(t => t.Id == toDo.Id);
@@ -120,6 +125,7 @@ namespace Asana.Library.Services
             }
 
             project.ToDos.Remove(toDo);
+            ProjectServiceProxy.Current.UpdateCompletePercent(project);
         }
     }
 }

@@ -22,12 +22,12 @@ public partial class ToDosInProject : ContentPage
     }
     private void EditClicked(object sender, EventArgs e)
     {
-        var selectedId = (BindingContext as MainPageViewModel)?.SelectedToDoId ?? 0;
+        var selectedId = (BindingContext as ToDosInProjectViewModel)?.SelectedToDoId ?? 0;
         Shell.Current.GoToAsync($"//ToDoDetails?toDoId={selectedId}");
     }
     private void DeleteClicked(object sender, EventArgs e)
     {
-        (BindingContext as MainPageViewModel)?.DeleteToDo();
+        (BindingContext as ToDosInProjectViewModel)?.DeleteToDo();
     }
 
     private void ContentPage_NavigatedTo(object sender, NavigatedToEventArgs e)

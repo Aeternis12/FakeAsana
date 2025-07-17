@@ -36,32 +36,8 @@ namespace Asana.Maui.ViewModels
             ProjectServiceProxy.Current.DeleteProject(Model);
         }
 
-
-
         public ICommand? DeleteCommand { get; set; }
 
-        //public List<int> Priorities
-        //{
-        //    get
-        //    {
-        //        return new List<int> { 1, 2, 3, 4 };
-        //    }
-        //}
-
-        //public int SelectedPriority
-        //{
-        //    get
-        //    {
-        //        return Model?.Priority ?? 4;
-        //    }
-        //    set
-        //    {
-        //        if (Model != null && Model.Priority != value)
-        //        {
-        //            Model.Priority = value;
-        //        }
-        //    }
-        //}
 
         public void AddOrUpdateProject()
         {

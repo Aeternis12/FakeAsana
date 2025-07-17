@@ -29,11 +29,6 @@ namespace Asana.Library.Services
         private ProjectServiceProxy()
         {
             Projects = new List<Project>();
-            if (!_ProjectList.Any(p => p.Id == 0))
-            {
-                _ProjectList.Add(new Project { Id = 0, Name = "Misc.", ToDos = new List<ToDo>() });
-            }
-
         }
 
         private static ProjectServiceProxy? instance;
@@ -82,7 +77,7 @@ namespace Asana.Library.Services
 
         public Project AddOrUpdate(Project? project)
         {
-            if (project != null && project.Id == 0)
+            if (project != null && project.Id == 1)
             {
                 project.Id = nextKey;
                 _ProjectList.Add(project);
