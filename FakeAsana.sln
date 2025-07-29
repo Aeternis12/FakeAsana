@@ -3,8 +3,6 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.14.36221.1
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FakeAsana_Blazor", "..\..\..\..\..\School\2025_Summer\COP4870\FakeAsana_Blazor\FakeAsana_Blazor\FakeAsana_Blazor.csproj", "{9C526458-19BC-1516-6EE5-A9A3B98E51B2}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Asana.Maui", "Asana.Maui\Asana.Maui.csproj", "{38E46E32-CC95-C46C-ACED-DD29E404013A}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Asana.Library", "Asana.Library\Asana.Library.csproj", "{6B04F64E-F64F-0FB5-711E-81E1DB8C19D4}"
@@ -13,16 +11,14 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Asana.CLI", "Asana.CLI\Asan
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FakeAsana.API", "..\AsanaSuperSolution\AsanaSuperSolution\FakeAsana.API\FakeAsana.API.csproj", "{AE768143-F4E7-4B5A-AE55-20F58299A17C}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FakeAsana_Blazor", "FakeAsana_Blazor\FakeAsana_Blazor.csproj", "{36B1702B-372A-3EC6-615E-7A2A171417E2}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{9C526458-19BC-1516-6EE5-A9A3B98E51B2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{9C526458-19BC-1516-6EE5-A9A3B98E51B2}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{9C526458-19BC-1516-6EE5-A9A3B98E51B2}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{9C526458-19BC-1516-6EE5-A9A3B98E51B2}.Release|Any CPU.Build.0 = Release|Any CPU
 		{38E46E32-CC95-C46C-ACED-DD29E404013A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{38E46E32-CC95-C46C-ACED-DD29E404013A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{38E46E32-CC95-C46C-ACED-DD29E404013A}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -39,6 +35,10 @@ Global
 		{AE768143-F4E7-4B5A-AE55-20F58299A17C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{AE768143-F4E7-4B5A-AE55-20F58299A17C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{AE768143-F4E7-4B5A-AE55-20F58299A17C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{36B1702B-372A-3EC6-615E-7A2A171417E2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{36B1702B-372A-3EC6-615E-7A2A171417E2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{36B1702B-372A-3EC6-615E-7A2A171417E2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{36B1702B-372A-3EC6-615E-7A2A171417E2}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
