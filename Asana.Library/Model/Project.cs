@@ -10,7 +10,7 @@ namespace Asana.Library.Model
     {
         public Project()
         {
-            Id = 1;
+            Id = 0;
             CompletePercent = 0;
             ToDos = new List<ToDo>();
         }
@@ -18,7 +18,7 @@ namespace Asana.Library.Model
         public string? Name { get; set; }
         public string? Description { get; set; }
 
-        public float? CompletePercent { get; set; }
+        public double? CompletePercent { get; set; }
         
         public List<ToDo> ToDos { get; set; }
 

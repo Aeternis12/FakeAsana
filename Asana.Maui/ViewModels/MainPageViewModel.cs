@@ -1,79 +1,67 @@
 ﻿using Asana.Library.Model;
 using Asana.Library.Services;
-using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
 using System.Runtime.CompilerServices;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace Asana.Maui.ViewModels
 {
     public class MainPageViewModel : INotifyPropertyChanged
     {
-        private ToDoServiceProxy _toDoSvc;
+        private ProjectServiceProxy _projectSvc;
+        public ObservableCollection<ProjectViewModel> Projects { get; private set; } = new();
+
+        public ProjectViewModel? SelectedProject { get; set; }
+        public int? SelectedProjectId
+        {
+            get
+            {
+                return SelectedProject?.Model?.Id ?? 0;
+            }
+
+        }
 
         public MainPageViewModel()
         {
-            _toDoSvc = ToDoServiceProxy.Current;
+            _projectSvc = ProjectServiceProxy.Current;
+            Projects = new ObservableCollection<ProjectViewModel>(_projectSvc.Projects.Select(t => new ProjectViewModel(t)));
         }
 
-        public ToDoDetailViewModel? SelectedToDo { get; set; }
-
-        public ObservableCollection<ToDoDetailViewModel> ToDos
+        public async Task LoadProjectsAsync()
         {
-            get
-            {
-                var toDos = _toDoSvc.ToDos.Select(t => new ToDoDetailViewModel(t));
-
-                if (!IsShowCompleted)
-                {
-                    toDos = toDos.Where(t => !t?.Model?.IsCompleted ?? false);
-                }
-                return new ObservableCollection<ToDoDetailViewModel>(toDos);
-            }
+            var projects = await _projectSvc.GetProjects();
+            Projects.Clear();
+            foreach (var project in projects)
+                Projects.Add(new ProjectViewModel(project));
+            NotifyPropertyChanged(nameof(Projects));
         }
 
-        public int? SelectedToDoId => SelectedToDo?.Model?.Id ?? 0;
-
-        private bool isShowCompleted;
-
-        public bool IsShowCompleted
+        public async Task AddOrUpdateProjectAsync(ProjectViewModel project)
         {
-            get
-            {
-                return isShowCompleted;
-            }
-            set
-            {
-                if (isShowCompleted != value)
-                {
-                    isShowCompleted = value;
-                    NotifyPropertyChanged(nameof(ToDos));
-                }
-            }
+            await project.AddOrUpdateProject();
+            await LoadProjectsAsync();
         }
 
-        public void DeleteToDo()
+        public async Task DeleteProjectAsync(ProjectViewModel project)
         {
-            if (SelectedToDo == null)
-            {
-                return;
-            }
-
-            ToDoServiceProxy.Current.DeleteToDo(SelectedToDo.Model);
-            NotifyPropertyChanged(nameof(ToDos));
+            if (project == null) return;
+            await ProjectServiceProxy.Current.DeleteProject(project.Model.Id);
+            Projects.Remove(project);
+            NotifyPropertyChanged(nameof(Projects));
         }
 
         public void RefreshPage()
         {
-            NotifyPropertyChanged(nameof(ToDos));
+            //Can add this to refresh because the projects are not filtered
+            Projects.Clear();
+            foreach (var project in _projectSvc.Projects)
+                Projects.Add(new ProjectViewModel(project));
+            NotifyPropertyChanged(nameof(Projects));
         }
 
         public event PropertyChangedEventHandler? PropertyChanged;
-
         private void NotifyPropertyChanged([CallerMemberName] string propertyName = "")
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));

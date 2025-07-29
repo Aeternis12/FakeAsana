@@ -12,36 +12,37 @@ namespace Asana.Maui.ViewModels
     public class ProjectViewModel
     {
         public Project? Model { get; set; }
-        
+        public ICommand? DeleteCommand { get; set; }
+
         
         public ProjectViewModel()
         {
             Model = new Project();
         }
 
-        public ProjectViewModel(int id)
-        {
-            Model = ProjectServiceProxy.Current.GetById(id) ?? new Project();
-            DeleteCommand = new Command(DoDelete);
-        }
-
         public ProjectViewModel(Project? model)
         {
             Model = model ?? new Project();
-            DeleteCommand = new Command(DoDelete);
+            DeleteCommand = new Command(async () => await DeleteProjectAsync());
         }
 
-        public void DoDelete()
+        public async Task LoadProjectsAsync(int id)
         {
-            ProjectServiceProxy.Current.DeleteProject(Model);
+            Model = await ProjectServiceProxy.Current.GetById(id) ?? new Project();
+            DeleteCommand = new Command(async () => await DeleteProjectAsync());
+        }
+ 
+       
+
+        public async Task DeleteProjectAsync()
+        {
+            if (Model == null) return;
+            await ProjectServiceProxy.Current.DeleteProject(Model.Id);
         }
 
-        public ICommand? DeleteCommand { get; set; }
-
-
-        public void AddOrUpdateProject()
+        public async Task AddOrUpdateProject()
         {
-            ProjectServiceProxy.Current.AddOrUpdate(Model);
+            await ProjectServiceProxy.Current.AddOrUpdate(Model);
         }
 
 

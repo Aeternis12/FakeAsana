@@ -6,28 +6,32 @@ namespace Asana.Maui.Views;
 [QueryProperty(nameof(ProjectId), "projectId")]
 public partial class ToDosInProject : ContentPage
 {
-	public int ProjectId { get; set; }
+    public int ProjectId { get; set; }
     public ToDosInProject()
-	{
-		InitializeComponent();
-	}
+    {
+        InitializeComponent();
+    }
 
-    private void CancelClicked(object sender, EventArgs e)
+    private async void CancelClicked(object sender, EventArgs e)
     {
-		Shell.Current.GoToAsync("//ProjectsPage");
+        await Shell.Current.GoToAsync("//MainPage");
     }
-    private void AddNewClicked(object sender, EventArgs e)
+    private async void AddNewClicked(object sender, EventArgs e)
     {
-        Shell.Current.GoToAsync("//ToDoDetails");
+        await Shell.Current.GoToAsync("//ToDoDetails");
     }
-    private void EditClicked(object sender, EventArgs e)
+    private async void EditClicked(object sender, EventArgs e)
     {
         var selectedId = (BindingContext as ToDosInProjectViewModel)?.SelectedToDoId ?? 0;
-        Shell.Current.GoToAsync($"//ToDoDetails?toDoId={selectedId}");
+        await Shell.Current.GoToAsync($"//ToDoDetails?toDoId={selectedId}");
     }
-    private void DeleteClicked(object sender, EventArgs e)
+    private async void DeleteClicked(object sender, EventArgs e)
     {
-        (BindingContext as ToDosInProjectViewModel)?.DeleteToDo();
+        var viewModel = BindingContext as ToDosInProjectViewModel;
+        if (viewModel?.SelectedToDo != null)
+        {
+            await viewModel.DeleteToDoAsync(viewModel.SelectedToDo);
+        }
     }
 
     private void ContentPage_NavigatedTo(object sender, NavigatedToEventArgs e)
@@ -40,4 +44,8 @@ public partial class ToDosInProject : ContentPage
 
     }
 
+    private void InLineDeleteClicked(object sender, EventArgs e)
+    {
+        (BindingContext as ToDosInProjectViewModel)?.RefreshPage();
+    }
 }

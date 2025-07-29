@@ -12,23 +12,26 @@ public partial class ProjectDetailView : ContentPage
 	}
 
     public int ProjectId { get; set; }
-    private void CancelClicked(object sender, EventArgs e)
+    private async void OkClicked(object sender, EventArgs e)
     {
-        Shell.Current.GoToAsync("//ProjectsPage");
+        if (BindingContext is ProjectViewModel viewModel) 
+        await viewModel.AddOrUpdateProject();
+        await Shell.Current.GoToAsync("//MainPage");
+    }
+    private async void CancelClicked(object sender, EventArgs e)
+    {
+        await Shell.Current.GoToAsync("//MainPage");
     }
 
-    private void ContentPage_NavigatedTo(object sender, NavigatedToEventArgs e)
+    private async void ContentPage_NavigatedTo(object sender, NavigatedToEventArgs e)
     {
-        BindingContext = new ProjectViewModel(ProjectId);
+        var viewModel = new ProjectViewModel();
+        await viewModel.LoadProjectsAsync(ProjectId);
+        BindingContext = viewModel;
     }
 
     private void ContentPage_NavigatedFrom(object sender, NavigatedFromEventArgs e)
     {
     }
 
-    private void OkClicked(object sender, EventArgs e)
-    {
-        (BindingContext as ProjectViewModel)?.AddOrUpdateProject();
-        Shell.Current.GoToAsync("//ProjectsPage");
-    }
 }

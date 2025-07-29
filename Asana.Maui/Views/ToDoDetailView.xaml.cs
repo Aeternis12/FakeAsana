@@ -19,7 +19,7 @@ public partial class ToDoDetailView : ContentPage
 
     private void OkClicked(object sender, EventArgs e)
     {
-        (BindingContext as ToDoDetailViewModel)?.AddOrUpdateToDo();
+        (BindingContext as ToDoViewModel)?.AddOrUpdateAsync();
         Shell.Current.GoToAsync("//MainPage");
     }
 
@@ -28,8 +28,10 @@ public partial class ToDoDetailView : ContentPage
 
     }
 
-    private void ContentPage_NavigatedTo(object sender, NavigatedToEventArgs e)
+    private async void ContentPage_NavigatedTo(object sender, NavigatedToEventArgs e)
     {
-        BindingContext = new ToDoDetailViewModel(ToDoId);
+        var viewModel = new ToDoViewModel();
+        await viewModel.LoadAsync(ToDoId);
+        BindingContext = viewModel;
     }
 }

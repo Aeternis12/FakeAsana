@@ -4,87 +4,80 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Input;
 
 namespace Asana.Maui.ViewModels
 {
-    public class ToDoDetailViewModel : INotifyPropertyChanged
+    public class ToDoViewModel : INotifyPropertyChanged
     {
-        public ToDoDetailViewModel()
-        {
-            Model = new ToDo();
-            Projects = ProjectServiceProxy.Current.Projects.ToList();
-        }
-
-        public ToDoDetailViewModel(int id)
-        {
-            Model = ToDoServiceProxy.Current.GetById(id) ?? new ToDo();
-            Projects = ProjectServiceProxy.Current.Projects.ToList();
-            DeleteCommand = new Command(DoDelete);
-        }
-
-        public ToDoDetailViewModel(ToDo? model)
-        {
-            Model = model ?? new ToDo();
-            Projects = ProjectServiceProxy.Current.Projects.ToList();
-            DeleteCommand = new Command(DoDelete);
-        }
-
-        public List<Project> Projects { get; } = new List<Project>();
-
-        public Project? SelectedProject
-        {
-            get => Projects.FirstOrDefault(p => p.Id == Model?.ProjectId);
-
-            set
-            {
-                if (Model != null && value != null)
-                {
-                    Model.ProjectId = value.Id;
-                }
-                OnPropertyChanged(nameof(SelectedProject));
-            }
-        }
-
-        public void DoDelete()
-        {
-            ToDoServiceProxy.Current.DeleteToDo(Model);
-        }
-
-
-
         public ToDo? Model { get; set; }
-
         public ICommand? DeleteCommand { get; set; }
-
         public List<int> Priorities
         {
             get
             {
-                return new List<int> { 1, 2, 3, 4 };
+               return new List<int> { 1, 2, 3, 4 };
             }
+        }
+        public List<Project> Projects { get; private set; } = new List<Project>();
+
+        public ToDoViewModel()
+        {
+            Model = new ToDo();
+            DeleteCommand = new Command(async () => await DeleteAsync());
+        }
+
+        public ToDoViewModel(ToDo? model)
+        {
+            Model = model ?? new ToDo();
+            Projects = ProjectServiceProxy.Current.Projects.ToList();
+            DeleteCommand = new Command(async () => await DeleteAsync());
+        }
+
+        public async Task LoadAsync(int id)
+        {
+            Model = await ToDoServiceProxy.Current.GetById(id) ?? new ToDo();
+            Projects = await ProjectServiceProxy.Current.GetProjects();
+            OnPropertyChanged(nameof(Model));
+            OnPropertyChanged(nameof(Projects));
+        }
+
+        public async Task AddOrUpdateAsync()
+        {
+            await ToDoServiceProxy.Current.AddOrUpdate(Model);
+        }
+
+        public async Task DeleteAsync()
+        {
+            if (Model == null) return;
+            await ToDoServiceProxy.Current.DeleteToDo(Model.Id);
         }
 
         public int SelectedPriority
         {
-            get
-            {
-                return Model?.Priority ?? 4;
-            }
+            get => Model?.Priority ?? 4;
             set
             {
                 if (Model != null && Model.Priority != value)
                 {
                     Model.Priority = value;
+                    OnPropertyChanged(nameof(SelectedPriority));
                 }
             }
         }
 
-        public void AddOrUpdateToDo()
+        public Project? SelectedProject
         {
-            ToDoServiceProxy.Current.AddOrUpdate(Model);
+            get => Projects.FirstOrDefault(p => p.Id == Model?.ProjectId);
+            set
+            {
+                if (Model != null && value != null)
+                {
+                    Model.ProjectId = value.Id;
+                    OnPropertyChanged(nameof(SelectedProject));
+                }
+            }
         }
 
         public DateTime DueDate

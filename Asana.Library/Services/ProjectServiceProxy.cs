@@ -1,4 +1,6 @@
 ﻿using Asana.Library.Model;
+using Asana.Library.Util;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,90 +12,68 @@ namespace Asana.Library.Services
 {
     public class ProjectServiceProxy
     {
-        private List<Project> _ProjectList;
-        public List<Project> Projects
-        {
-            get
-            {
-                return _ProjectList.Take(100).ToList();
-            }
-            private set
-            {
-                if (value != _ProjectList)
-                {
-                    _ProjectList = value;
-                }
-            }
-        }
+        private readonly WebRequestHandler _webRequestHandler = new WebRequestHandler();
 
-        private ProjectServiceProxy()
-        {
-            Projects = new List<Project>();
-        }
-
+        private static object _lock = new object();
         private static ProjectServiceProxy? instance;
-
-        private int nextKey
-        {
-            get
-            {
-                if (Projects.Any())
-                {
-                    return Projects.Select(t => t.Id).Max() + 1;
-                }
-                return 1;
-            }
-        }
-
         public static ProjectServiceProxy Current
         {
             get
             {
-                if (instance == null)
+                lock (_lock)
                 {
-                    instance = new ProjectServiceProxy();
+                    if (instance == null)
+                    {
+                        instance = new ProjectServiceProxy();
+                    }
                 }
 
                 return instance;
             }
         }
 
-        public void UpdateCompletePercent(Project project)
+        public List<Project> Projects
         {
-            if(project == null || project.ToDos == null || !project.ToDos.Any())
+            get
             {
-                project.CompletePercent = 0;
-                return;
+                return _projects;
             }
-            var completed = project.ToDos.Count(t => t.IsCompleted == true);
-            project.CompletePercent = completed / (float)project.ToDos.Count * 100;
-
         }
 
-        public Project? GetById(int id)
+        private List<Project> _projects;
+
+        public ProjectServiceProxy()
         {
-            return Projects.FirstOrDefault(t => t.Id == id);
+            _projects = new List<Project>();
         }
 
-        public Project AddOrUpdate(Project? project)
+        public async Task<List<Project>> GetProjects()
         {
-            if (project != null && project.Id == 1)
+            var projectData = await _webRequestHandler.Get("/Project/Expand");
+            if (string.IsNullOrEmpty(projectData))
             {
-                project.Id = nextKey;
-                _ProjectList.Add(project);
+                Console.WriteLine("No project data received.");
+                return new List<Project>();
             }
-
-            return project;
+            _projects = JsonConvert.DeserializeObject<List<Project>>(projectData) ?? new List<Project>();
+            return _projects;
         }
 
-        public void DeleteProject(Project? project)
+        public async Task<Project?> GetById(int id)
         {
+            var data = await _webRequestHandler.Get($"/Project/{id}");
+            return JsonConvert.DeserializeObject<Project>(data);
+        }
 
-            if (project == null)
-            {
-                return;
-            }
-            _ProjectList.Remove(project);
+        public async Task<Project?> AddOrUpdate(Project? project)
+        {
+            var data = await _webRequestHandler.Post("/Project", project);
+            return JsonConvert.DeserializeObject<Project>(data);
+        }
+
+        public async Task DeleteProject(int id)
+        {
+            await _webRequestHandler.Delete($"/Project/{id}");
         }
     }
 }

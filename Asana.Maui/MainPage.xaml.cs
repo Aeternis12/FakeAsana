@@ -1,51 +1,52 @@
-﻿using Asana.Library.Model;
-using Asana.Maui.ViewModels;
+﻿using Asana.Maui.ViewModels;
 
-namespace Asana.Maui
+namespace Asana.Maui;
+public partial class MainPage : ContentPage
 {
-    public partial class MainPage : ContentPage
+    public MainPage()
     {
-        //int count = 0;
+        InitializeComponent();
+        BindingContext = new MainPageViewModel();
+    }
 
-        public MainPage()
-        {
-            InitializeComponent();
-            BindingContext = new MainPageViewModel();
-        }
+    private async void AddClicked(object sender, EventArgs e)
+    {
+        await Shell.Current.GoToAsync("//ProjectDetails");
+    }
 
-        private void AddNewClicked(object sender, EventArgs e)
-        {
-            Shell.Current.GoToAsync("//ToDoDetails");
-        }
-        private void EditClicked(object sender, EventArgs e)
-        {
-            var selectedId = (BindingContext as MainPageViewModel)?.SelectedToDoId ?? 0;
-            Shell.Current.GoToAsync($"//ToDoDetails?toDoId={selectedId}");
-        }
-        private void DeleteClicked(object sender, EventArgs e)
-        {
-            (BindingContext as MainPageViewModel)?.DeleteToDo();
-        }
-        private void InLineDeleteClicked(object sender, EventArgs e)
-        {
-            (BindingContext as MainPageViewModel)?.RefreshPage();
-        }
+    private async void EditClicked(object sender, EventArgs e)
+    {
+        var selectedId = (BindingContext as MainPageViewModel)?.SelectedProjectId ?? 0;
+        await Shell.Current.GoToAsync($"//ProjectDetails?projectId={selectedId}");
+    }
 
-
-        private void ProjectClicked(object sender, EventArgs e)
+    private async void DeleteClicked(object sender, EventArgs e)
+    {
+        var viewModel = BindingContext as MainPageViewModel;
+        if (viewModel?.SelectedProject != null)
         {
-            Shell.Current.GoToAsync("//ProjectsPage");
+            await viewModel.DeleteProjectAsync(viewModel.SelectedProject);
         }
-       
-        private void ContentPage_NavigatedTo(object sender, NavigatedToEventArgs e)
-        {
-            (BindingContext as MainPageViewModel)?.RefreshPage();
-        }
+    }
 
-        private void ContentPage_NavigatedFrom(object sender, NavigatedFromEventArgs e)
-        {
+    private void ToDosInProjectClicked(object sender, EventArgs e)
+    {
+        var selectedId = (BindingContext as MainPageViewModel)?.SelectedProjectId ?? 0;
+        Shell.Current.GoToAsync($"//ToDosInProject?projectId={selectedId}");
+    }
+    private void InLineDeleteClicked(object sender, EventArgs e)
+    {
+        (BindingContext as MainPageViewModel)?.RefreshPage();
+    }
 
-        }
+    private void ContentPage_NavigatedFrom(object sender, NavigatedFromEventArgs e)
+    {
+
+    }
+
+    private async void ContentPage_NavigatedTo(object sender, NavigatedToEventArgs e)
+    {
+        await (BindingContext as MainPageViewModel)?.LoadProjectsAsync();
     }
 
 }

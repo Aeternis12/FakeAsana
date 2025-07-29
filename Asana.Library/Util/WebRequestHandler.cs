@@ -10,7 +10,7 @@ namespace Asana.Library.Util
     public class WebRequestHandler
     {
         private string host = "localhost";
-        private string port = "7163";
+        private string port = "7127";
         private HttpClient Client { get; }
         public WebRequestHandler()
         {
@@ -30,7 +30,8 @@ namespace Asana.Library.Util
                 }
             } catch(Exception e)
             {
-
+                Console.WriteLine($"URL is {fullUrl}");
+                Console.WriteLine($"WebRequestHandler GET error: {e.Message}");
             }
 
 

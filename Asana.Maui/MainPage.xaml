@@ -2,75 +2,56 @@
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="Asana.Maui.MainPage"
+             Title="Projects"
+             NavigatedFrom="ContentPage_NavigatedFrom"
              NavigatedTo="ContentPage_NavigatedTo"
-             NavigatedFrom="ContentPage_NavigatedFrom">
-            
-
-    <ScrollView>
-        <VerticalStackLayout
-            Padding="30,0"
-            Spacing="25">
-            <Grid>
-                <Grid.RowDefinitions>
-                    <RowDefinition/>
-                    <RowDefinition Height="10*"/>
-                    <RowDefinition Height="10*"/>
-                </Grid.RowDefinitions>
-                <!--Tool Bar -->
-                <Grid Grid.Row="0">
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition/>
-                        <ColumnDefinition Width="11*"/>
-                    </Grid.ColumnDefinitions>
-                    <Label Grid.Column="0" Text="Show Completed Tasks:"/>
-                    <CheckBox Margin ="5" Grid.Column="1" IsChecked="{Binding IsShowCompleted}" />
-                </Grid>
-                <!-- ToDo List -->
-                <ListView
-                Grid.Row="1"
-                ItemsSource="{Binding ToDos}"
-                SelectedItem="{Binding SelectedToDo}">
-                    <ListView.ItemTemplate>
-                        <DataTemplate>
-                            <ViewCell>
-                                <Grid>
-                                    <Grid.ColumnDefinitions>
-                                        <ColumnDefinition/>
-                                        <ColumnDefinition Width="5*"/>
-                                        <ColumnDefinition/>
-                                    </Grid.ColumnDefinitions>
-                                    <Grid Grid.Column="1">
-                                        <Grid.ColumnDefinitions>
-                                            <ColumnDefinition/>
-                                            <ColumnDefinition Width="12*"/>
-                                        </Grid.ColumnDefinitions>
-                                        <Grid.RowDefinitions>
-                                            <RowDefinition/>
-                                            <RowDefinition/>
-                                            <RowDefinition/>
-                                        </Grid.RowDefinitions>
-                                        <Label Grid.Column="0" TextColor="Red" FontAttributes="Bold" Grid.Row ="0" Text="{Binding Model.Name}"/>
-                                        <Label Grid.Column="0" Grid.Row="1" Text="{Binding Model.Description}"/>
-                                        <Label Grid.Column="0" Grid.Row="2" Text="Due: "/>
-                                        <Label Grid.Column="1" Grid.Row="2" Text="{Binding Model.DueDate}"/>
-                                    </Grid>
-
-                                    <Button Grid.Column="2" Text="Delete" Clicked="InLineDeleteClicked" Command="{Binding DeleteCommand} "/>
+             >
+    <VerticalStackLayout
+        Padding="30,0"
+        Spacing="25">
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+            <!-- Project List -->
+            <ListView
+                    Grid.Row="0"
+                    ItemsSource="{Binding Projects}"
+                    SelectedItem="{Binding SelectedProject}">
+                <ListView.ItemTemplate>
+                    <DataTemplate>
+                        <ViewCell>
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition/>
+                                    <ColumnDefinition/>
+                                    <ColumnDefinition Width="10*"/>
+                                    <ColumnDefinition/>
+                                </Grid.ColumnDefinitions>
+                                <Label Grid.Column="0" Text="{Binding Model.Id}"/>
+                                <Grid Grid.Column="1">
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition/>
+                                        <RowDefinition/>
+                                        <RowDefinition/>
+                                    </Grid.RowDefinitions>
+                                    <Label FontAttributes="Bold" FontSize="Title" TextColor="Green" Grid.Row="0" Text="{Binding Model.Name}"/>
+                                    <Label Grid.Row="1" Text="{Binding Model.Description}"/>
                                 </Grid>
-                            </ViewCell>
-                        </DataTemplate>
-                    </ListView.ItemTemplate>
-                </ListView>
-                <!-- Button Bar -->
-                <VerticalStackLayout Grid.Row="2">
-                    <Button Text="Add New ToDo" Clicked="AddNewClicked"/>
-                    <Button Text="Edit Selected ToDo" Clicked="EditClicked"/>
-                    <Button Text="Delete Selected ToDo" Clicked="DeleteClicked"/>
-                    <Button Text="Manage Projects" Clicked="ProjectClicked"/>
-
-                </VerticalStackLayout>
-            </Grid>
-        </VerticalStackLayout>
-    </ScrollView>
-
+                                <Label Grid.Column="2"  TextColor="Red" FontSize="Title" Text="{Binding Model.CompletePercent, StringFormat='{}{0} %'}"/>
+                                <Button Grid.Column="3" Text="Delete" Clicked="InLineDeleteClicked" Command="{Binding DeleteCommand} "/>
+                            </Grid>
+                        </ViewCell>
+                    </DataTemplate>
+                </ListView.ItemTemplate>
+            </ListView>
+            <VerticalStackLayout Grid.Row="1">
+                <Button Text="Add New Project" Clicked="AddClicked"/>
+                <Button Text="Edit Selected Project" Clicked="EditClicked"/>
+                <Button Text="Delete Selected Project" Clicked="DeleteClicked"/>
+                <Button Text="Manage ToDos In Project" Clicked="ToDosInProjectClicked"/>
+            </VerticalStackLayout>
+        </Grid>
+    </VerticalStackLayout>
 </ContentPage>

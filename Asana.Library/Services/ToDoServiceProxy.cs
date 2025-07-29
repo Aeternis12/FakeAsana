@@ -1,4 +1,6 @@
 ﻿using Asana.Library.Model;
+using Asana.Library.Util;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,121 +13,55 @@ namespace Asana.Library.Services
     {
 
 
-        public List<ToDo> ToDos
-        {
-            get
-            {
-                return ProjectServiceProxy.Current.Projects.SelectMany(p => p.ToDos).Take(100).ToList();
-            }
+        private readonly WebRequestHandler _webRequestHandler = new WebRequestHandler();
 
-        }
+        public ToDoServiceProxy() { }
 
-        private ToDoServiceProxy()
-        {
-            var projects = ProjectServiceProxy.Current.Projects;
-        }
-
+        private static object _lock = new object();
         private static ToDoServiceProxy? instance;
-
-        private int nextKey
-        {
-            get
-            {
-                var allToDos = ToDos;
-                if (allToDos.Any())
-                {
-                    return allToDos.Select(t => t.Id).Max() + 1;
-                }
-                return 1;
-            }
-        }
-
         public static ToDoServiceProxy Current
         {
             get
             {
-                if (instance == null)
+                lock (_lock)
                 {
-                    instance = new ToDoServiceProxy();
+                    if (instance == null)
+                    {
+                        instance = new ToDoServiceProxy();
+                    }
                 }
 
                 return instance;
             }
         }
 
-        public ToDo? GetById(int id)
+        public async Task<List<ToDo>> GetToDos()
         {
-            return ToDos.FirstOrDefault(t => t.Id == id);
+            var todoData = await _webRequestHandler.Get("/ToDo");
+            return JsonConvert.DeserializeObject<List<ToDo>>(todoData) ?? new List<ToDo>();
         }
 
-        public List<ToDo> GetByProjectId(int projectId)
+        public async Task<ToDo?> GetById(int id)
         {
-            return ToDos.Where(t => t.ProjectId == projectId).ToList();
+            var toDdata = await _webRequestHandler.Get($"/ToDo/{id}");
+            return JsonConvert.DeserializeObject<ToDo>(toDdata);
         }
 
-        public ToDo AddOrUpdate(ToDo? toDo)
+        public async Task<List<ToDo>> GetByProjectId(int id)
         {
-            if (toDo == null)
-            {
-                return toDo;
-            }
-
-            var targetProject = ProjectServiceProxy.Current.GetById(toDo.ProjectId);
-            if (targetProject == null)
-            {
-                return toDo;
-            }
-
-            foreach (var project in ProjectServiceProxy.Current.Projects)
-            {
-                var existing = project.ToDos.FirstOrDefault(t => t.Id == toDo.Id);
-                if (existing != null)
-                {
-                    project.ToDos.Remove(existing);
-                    ProjectServiceProxy.Current.UpdateCompletePercent(targetProject);
-                    break;
-                }
-            }
-
-            if (toDo.Id == 0)
-            {
-                toDo.Id = nextKey;
-                targetProject.ToDos.Add(toDo);
-                ProjectServiceProxy.Current.UpdateCompletePercent(targetProject);
-            }
-            else
-            {
-                var existingToDo = targetProject.ToDos.FirstOrDefault(t => t.Id == toDo.Id);
-                if (existingToDo != null)
-                {
-                    existingToDo.Description = toDo.Description;
-                    existingToDo.IsCompleted = toDo.IsCompleted;
-                    existingToDo.DueDate = toDo.DueDate;
-                    existingToDo.Priority = toDo.Priority;
-                }
-                else
-                {
-                    targetProject.ToDos.Add(toDo);
-                    ProjectServiceProxy.Current.UpdateCompletePercent(targetProject);
-                }
-            }
-            return toDo;
+            var toDoData = await _webRequestHandler.Get($"/ToDo/Project/{id}");
+            return JsonConvert.DeserializeObject<List<ToDo>>(toDoData) ?? new List<ToDo>();
         }
 
-        public void DeleteToDo(ToDo? toDo)
+        public async Task<ToDo?> AddOrUpdate(ToDo? ToDo)
         {
-            var project = ProjectServiceProxy.Current.GetById(toDo.ProjectId);
-            if (project == null)
-            {
-                return;
-            }
-            if (toDo == null)
-            {
-                return;
-            }
+            var toDoData = await _webRequestHandler.Post("/ToDo", ToDo);
+            return JsonConvert.DeserializeObject<ToDo>(toDoData);
+        }
 
-            project.ToDos.Remove(toDo);
-            ProjectServiceProxy.Current.UpdateCompletePercent(project);
+        public async Task DeleteToDo(int id)
+        {
+            await _webRequestHandler.Delete($"/ToDo/{id}");
         }
     }
 }
