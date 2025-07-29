@@ -1,0 +1,109 @@
+﻿@inject NavigationManager Navigate
+@inject IToDoService ToDoSvc
+@using Asana.Library.Model
+@using FakeAsana_Blazor.Services
+
+
+@page "/ProjectToDos/{ProjectId:int}"
+
+
+<h3>Project ToDos</h3>
+
+<label>
+    <input type="checkbox" @bind="showCompleted" /> Show completed ToDos
+</label>
+
+<table class="table table-striped mt-3">
+    <thead>
+        <tr>
+            <th></th>
+            <th>Name</th>
+            <th>Description</th>
+            <th>Priority</th>
+            <th>Due Date</th>
+        </tr>
+    </thead>
+    <tbody>
+        @if(ToDos != null)
+        {
+            @foreach (var toDo in ToDos.Where(t => showCompleted || !(t.IsCompleted ?? false)))
+            {
+                <tr class="@(toDo == selectedToDo ? "table-primary" : "")"
+                    @onclick="() => SelectToDo(toDo)">
+                    <td>
+                        <input type="checkbox" @bind="toDo.IsCompleted"/>
+                    </td>
+                    <td>@toDo.Name</td>
+                    <td>@toDo.Description</td>
+                    <td>@toDo.Priority</td>
+                    <td>@toDo.DueDate?.ToShortDateString()</td>
+                </tr>
+            }
+        }
+    </tbody>
+</table>
+
+@if (!(ToDos?.Any() ?? false))
+{   
+    <div class="alert alert-warning mt-3">
+        No ToDos found for this project.
+    </div>
+}
+
+<div class="btn-group mt-3" role="group">
+    <button class="btn btn-success" @onclick="AddNewToDoClicked">Add New ToDo</button>
+    <button class="btn btn-primary" @onclick="EditSelectedToDoClicked" disabled="@(selectedToDo == null)">Edit Selected ToDo</button>
+    <button class="btn btn-danger" @onclick="DeleteToDoClicked" disabled="@(selectedToDo == null)">Delete Selected ToDo</button>
+    <button class="btn btn-secondary" @onclick="BackClicked">Back</button>
+</div>
+
+
+@code {
+
+    private ToDo? selectedToDo;
+    public List<ToDo> ToDos;
+    [Parameter] public int ProjectId { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+		await LoadToDosAsync();
+    }
+
+    private bool showCompleted = false;
+
+
+    private void SelectToDo(ToDo toDo)
+    {
+        selectedToDo = toDo;
+    }
+
+    private async Task LoadToDosAsync()
+    {
+        ToDos = await ToDoSvc.GetByProjectId(ProjectId);
+	}
+
+    private void AddNewToDoClicked(MouseEventArgs args)
+    {
+        Navigate.NavigateTo($"/ToDoDetails/{ProjectId}");
+    }
+    private void EditSelectedToDoClicked(MouseEventArgs args)
+    {
+        if (selectedToDo == null) return;
+        Navigate.NavigateTo($"/ToDoDetails/{ProjectId}/{selectedToDo.Id}");
+    }
+    private async Task DeleteToDoClicked(MouseEventArgs args)
+    {
+		if (selectedToDo == null) return;
+        await ToDoSvc.DeleteToDo(selectedToDo.Id);
+		selectedToDo = null;
+		await LoadToDosAsync();
+    }
+    private async Task BackClicked(MouseEventArgs args)
+    {
+        foreach (var toDo in ToDos)
+        {
+            await ToDoSvc.AddOrUpdate(toDo);
+        }
+        Navigate.NavigateTo("/");
+    }
+}

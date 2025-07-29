@@ -1,0 +1,81 @@
+﻿@inject NavigationManager Navigate
+@inject IToDoService ToDoSvc
+@using FakeAsana_Blazor.Services
+@using Asana.Library.Model
+
+@page "/ToDoDetails"
+@page "/ToDoDetails/{ProjectId:int}/{Id:int?}"
+
+<h3>ToDo Details</h3>
+
+<div class="card mt-3" style="max-width: 500px;">
+    <div class="card-body">
+        <form>
+            <div class="mb-3">
+                <label class="form-label">ToDo Name</label>
+                <input type="text" class="form-control" @bind="toDo.Name"/>
+            </div>
+            <div class="mb-3">
+                <label class="form-label">ToDo Description</label>
+                <input type="text" class="form-control" @bind="toDo.Description" />
+            </div>
+            <div class="mb-3">
+                <label class="form-label">Priority</label>
+                <select class="form-select" @bind="toDo.Priority">
+                    <option value="">Select Priority</option>
+                    <option value="1">1</option>
+                    <option value="2">2</option>
+                    <option value="3">3</option>
+                    <option value="4">4</option>
+                    <option value="5">5</option>
+                </select>
+            </div>
+            <div class="mb-3">
+                <label class="form-label">Due Date</label>
+                <input type="date" class="form-control" @bind="toDo.DueDate" />
+            </div>
+            <div class="form-check mb-3">
+                <input type="checkbox" class="form-check-input" id="isCompleted" @bind="toDo.IsCompleted" />
+                <label class="form-check-label" for="isCompleted">Completed</label>
+            </div>
+            <button type="button" class="btn btn-primary" @onclick="SubmitClicked">Submit</button>
+            <button type="button" class="btn btn-secondary ms-2" @onclick="CancelClicked">Cancel</button>
+        </form>
+    </div>
+</div>
+
+@code {
+
+    [Parameter] public int? ProjectId { get; set; }
+    [Parameter] public int? Id { get; set; }
+
+    private ToDo toDo = new ToDo();
+
+    protected override async Task OnParametersSetAsync()
+    {
+        if (Id.HasValue)
+        {
+            toDo = await ToDoSvc.GetById(Id.Value);
+            if (toDo == null)
+            {
+                toDo = new ToDo();
+            }
+        }
+        else
+        {
+            toDo = new ToDo();
+        }
+    }
+
+    private void CancelClicked(MouseEventArgs args)
+    {
+        Navigate.NavigateTo($"/ProjectToDos/{ProjectId}");
+    }
+
+    private async Task SubmitClicked(MouseEventArgs args)
+    {
+		toDo.ProjectId = ProjectId ?? 0;
+        await ToDoSvc.AddOrUpdate(toDo);
+        Navigate.NavigateTo($"/ProjectToDos/{ProjectId}");
+    }
+}

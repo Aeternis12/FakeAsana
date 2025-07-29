@@ -1,0 +1,60 @@
+﻿@inject NavigationManager Navigate
+@inject IProjectService ProjectSvc
+@using FakeAsana_Blazor.Services
+@using Asana.Library.Model
+
+@page "/ProjectDetails"
+@page "/ProjectDetails/{ProjectId:int?}"
+
+<h3>Project Details</h3>
+
+<div class="card mt-3" style="max-width: 500px;">
+    <div class="card-body">
+        <form>
+            <div class="mb-3">
+                <label class="form-label">Project Name</label>
+                <input type="text" class="form-control" @bind="project.Name"/>
+            </div>
+            <div class="mb-3">
+                <label class="form-label">Project Description</label>
+                <input type="text" class="form-control" @bind="project.Description" />
+            </div>
+            <button type="button" class="btn btn-primary" @onclick="SubmitClicked">Submit</button>
+            <button type="button" class="btn btn-secondary ms-2" @onclick="CancelClicked">Cancel</button>
+        </form>
+    </div>
+</div>
+
+@code {
+
+    [Parameter] public int? ProjectId { get; set; }
+
+    private Project project = new Project();
+
+    protected override async Task OnParametersSetAsync()
+    {
+        if (ProjectId.HasValue)
+        {
+            project = await ProjectSvc.GetById(ProjectId.Value);
+            if (project == null)
+            {
+                project = new Project();
+            }
+        }
+        else
+        {
+            project = new Project();
+        }
+    }
+
+    private void CancelClicked(MouseEventArgs args)
+    {
+        Navigate.NavigateTo("/");
+    }
+
+    private async Task SubmitClicked(MouseEventArgs args)
+    {
+        await ProjectSvc.AddOrUpdate(project);
+        Navigate.NavigateTo("/");
+    }
+}

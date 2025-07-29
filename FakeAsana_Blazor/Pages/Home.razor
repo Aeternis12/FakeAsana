@@ -1,0 +1,93 @@
+﻿@using Asana.Library.Model
+@using FakeAsana_Blazor.Services
+
+@page "/"
+@inject IProjectService ProjectSvc
+@inject NavigationManager Navigate
+
+<PageTitle>Main Page</PageTitle>
+
+<h1>Projects</h1>
+Create/Manage Your Projects Here!
+
+@if (Projects != null)
+{
+	<table class="table table-striped">
+		<thead>
+			<tr>
+				<th>Name</th>
+				<th>Description</th>
+				<th>Complete %</th>
+			</tr>
+		</thead>
+		<tbody>
+			@foreach (var project in Projects) 
+			{
+				<tr class="@(project == selectedProject ? "table-primary" : "")"
+					@onclick="() => SelectProject(project)">
+					<td><b>@project.Name</b></td>
+					<td>@project.Description</td>
+					<td>@project.CompletePercent%</td>
+				</tr>
+			}
+		</tbody>
+	</table>
+}else
+{
+	<div class="alert alert-info">
+		Loading projects...
+	</div>
+}
+
+
+<div class="btn-group mt-3" role="group">
+    <button class="btn btn-success" @onclick="AddNewProjectClicked">Add New Project</button>
+    <button class="btn btn-primary" @onclick="EditSelectedProjectClicked" disabled="@(selectedProject == null)">Edit Selected Project</button>
+    <button class="btn btn-info" @onclick="ToDosInProjectClicked" disabled="@(selectedProject == null)">ToDos In Selected Project</button>
+    <button class="btn btn-danger" @onclick="DeleteProjectClicked" disabled="@(selectedProject == null)">Delete Selected Project</button>
+</div>
+
+@code {
+
+	private Project? selectedProject;
+
+	public List<Project> Projects;
+
+	protected override async Task OnInitializedAsync()
+	{
+		await LoadProjectsAsync();
+	}
+
+	private async Task LoadProjectsAsync()
+	{
+		Projects = await ProjectSvc.GetProjects();
+
+	}
+	private void SelectProject(Project project)
+	{
+		selectedProject = project;
+	}
+
+	private void AddNewProjectClicked()
+	{
+		Navigate.NavigateTo("/ProjectDetails");
+	}
+	private void EditSelectedProjectClicked()
+	{
+		if (selectedProject == null) return;
+		Navigate.NavigateTo($"/ProjectDetails/{selectedProject.Id}");
+	}
+	private void ToDosInProjectClicked()
+	{
+		if (selectedProject == null) return;
+		Navigate.NavigateTo($"/ProjectToDos/{selectedProject.Id}");
+	}
+	private async Task DeleteProjectClicked()
+	{
+		if (selectedProject == null) return;
+		await ProjectSvc.DeleteProject(selectedProject.Id);
+		selectedProject = null;
+		await LoadProjectsAsync();
+
+	}
+}
