@@ -60,8 +60,8 @@
                 <!-- Button Bar -->
                 <VerticalStackLayout Grid.Row="2">
                     <Button Text="Add New ToDo" Clicked="AddNewClicked"/>
-                    <Button Text="Edit Selected ToDo" Clicked="EditClicked"/>
-                    <Button Text="Delete Selected ToDo" Clicked="DeleteClicked"/>
+                    <Button Text="Edit Selected ToDo" IsEnabled="{Binding IsToDoSelected}" Clicked="EditClicked"/>
+                    <Button Text="Delete Selected ToDo" IsEnabled="{Binding IsToDoSelected}" Clicked="DeleteClicked"/>
                     <Button Text="Cancel" Clicked="CancelClicked"/>
                 </VerticalStackLayout>
             </Grid>

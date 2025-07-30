@@ -12,11 +12,11 @@ public partial class ProjectDetailView : ContentPage
 	}
 
     public int ProjectId { get; set; }
-    private async void OkClicked(object sender, EventArgs e)
+    private  void OkClicked(object sender, EventArgs e)
     {
-        if (BindingContext is ProjectViewModel viewModel) 
-        await viewModel.AddOrUpdateProject();
-        await Shell.Current.GoToAsync("//MainPage");
+        //If we are adding a new projects, contexty will have a project with Id 0
+        (BindingContext as ProjectViewModel)?.AddOrUpdateProject();
+        Shell.Current.GoToAsync("//MainPage");
     }
     private async void CancelClicked(object sender, EventArgs e)
     {
@@ -25,13 +25,16 @@ public partial class ProjectDetailView : ContentPage
 
     private async void ContentPage_NavigatedTo(object sender, NavigatedToEventArgs e)
     {
+        //If we are adding a new project, ProjectId will be 0 since viewModel has a project with Id 0
+        //Otherwise, load the project with the given ProjectId
         var viewModel = new ProjectViewModel();
-        await viewModel.LoadProjectsAsync(ProjectId);
+        await viewModel.LoadProjectAsync(ProjectId);
         BindingContext = viewModel;
     }
 
     private void ContentPage_NavigatedFrom(object sender, NavigatedFromEventArgs e)
     {
+
     }
 
 }

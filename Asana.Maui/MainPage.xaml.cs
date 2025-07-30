@@ -16,21 +16,21 @@ public partial class MainPage : ContentPage
 
     private async void EditClicked(object sender, EventArgs e)
     {
+        // Gets the ID of the selected project from viewModel so we can get the details of it and edit the selected project
         var selectedId = (BindingContext as MainPageViewModel)?.SelectedProjectId ?? 0;
         await Shell.Current.GoToAsync($"//ProjectDetails?projectId={selectedId}");
     }
 
     private async void DeleteClicked(object sender, EventArgs e)
     {
-        var viewModel = BindingContext as MainPageViewModel;
-        if (viewModel?.SelectedProject != null)
-        {
-            await viewModel.DeleteProjectAsync(viewModel.SelectedProject);
-        }
+
+        var selectedProject = (BindingContext as MainPageViewModel)?.SelectedProject;
+        await (BindingContext as MainPageViewModel)?.DeleteProjectAsync(selectedProject);
     }
 
     private void ToDosInProjectClicked(object sender, EventArgs e)
     {
+        // Gets the ID of the selected project from viewModel so we can navigate to the ToDos in that project
         var selectedId = (BindingContext as MainPageViewModel)?.SelectedProjectId ?? 0;
         Shell.Current.GoToAsync($"//ToDosInProject?projectId={selectedId}");
     }
@@ -46,6 +46,7 @@ public partial class MainPage : ContentPage
 
     private async void ContentPage_NavigatedTo(object sender, NavigatedToEventArgs e)
     {
+       
         await (BindingContext as MainPageViewModel)?.LoadProjectsAsync();
     }
 

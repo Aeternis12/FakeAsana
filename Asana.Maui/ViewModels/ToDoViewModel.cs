@@ -20,14 +20,19 @@ namespace Asana.Maui.ViewModels
                return new List<int> { 1, 2, 3, 4 };
             }
         }
+
+        //Projects set up so we can assign a ToDo to a Project.
         public List<Project> Projects { get; private set; } = new List<Project>();
 
+        //Simple constructor for a new ToDo when adding a new one
         public ToDoViewModel()
         {
             Model = new ToDo();
             DeleteCommand = new Command(async () => await DeleteAsync());
         }
 
+
+        //Constructor used when editing or viewing a ToDo
         public ToDoViewModel(ToDo? model)
         {
             Model = model ?? new ToDo();
@@ -35,19 +40,25 @@ namespace Asana.Maui.ViewModels
             DeleteCommand = new Command(async () => await DeleteAsync());
         }
 
+        //Loads ToDos and Projects based on the ID
+        //Notifies the UI of changes to the Model, Projects, and SelectedProject
         public async Task LoadAsync(int id)
         {
             Model = await ToDoServiceProxy.Current.GetById(id) ?? new ToDo();
             Projects = await ProjectServiceProxy.Current.GetProjects();
             OnPropertyChanged(nameof(Model));
             OnPropertyChanged(nameof(Projects));
+            OnPropertyChanged(nameof(SelectedProject));
         }
 
+        //Adds or updates the ToDo by calling the service proxy which calls to API
         public async Task AddOrUpdateAsync()
         {
             await ToDoServiceProxy.Current.AddOrUpdate(Model);
         }
 
+
+        //Deletes the ToDo by calling the service proxy which calls to API
         public async Task DeleteAsync()
         {
             if (Model == null) return;
@@ -80,6 +91,7 @@ namespace Asana.Maui.ViewModels
             }
         }
 
+        //When due date and time are set, they are combined into a single DateTime property.
         public DateTime DueDate
         {
             get => Model?.DueDate?.Date ?? DateTime.Today;
@@ -95,6 +107,7 @@ namespace Asana.Maui.ViewModels
             }
         }
 
+        // When due time is set, it is combined with the existing date to form a DateTime property.
         public TimeSpan DueTime
         {
             get => Model?.DueDate?.TimeOfDay ?? TimeSpan.Zero;

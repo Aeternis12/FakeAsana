@@ -48,9 +48,9 @@
             </ListView>
             <VerticalStackLayout Grid.Row="1">
                 <Button Text="Add New Project" Clicked="AddClicked"/>
-                <Button Text="Edit Selected Project" Clicked="EditClicked"/>
-                <Button Text="Delete Selected Project" Clicked="DeleteClicked"/>
-                <Button Text="Manage ToDos In Project" Clicked="ToDosInProjectClicked"/>
+                <Button Text="Edit Selected Project" IsEnabled="{Binding IsProjectSelected}" Clicked="EditClicked"/>
+                <Button Text="Delete Selected Project" IsEnabled="{Binding IsProjectSelected}" Clicked="DeleteClicked"/>
+                <Button Text="Manage ToDos In Project" IsEnabled="{Binding IsProjectSelected}" Clicked="ToDosInProjectClicked"/>
             </VerticalStackLayout>
         </Grid>
     </VerticalStackLayout>

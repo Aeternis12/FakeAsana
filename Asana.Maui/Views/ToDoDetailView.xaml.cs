@@ -19,6 +19,7 @@ public partial class ToDoDetailView : ContentPage
 
     private void OkClicked(object sender, EventArgs e)
     {
+        //If we are adding a new ToDo, context will have a ToDo with Id 0
         (BindingContext as ToDoViewModel)?.AddOrUpdateAsync();
         Shell.Current.GoToAsync("//MainPage");
     }
@@ -30,6 +31,8 @@ public partial class ToDoDetailView : ContentPage
 
     private async void ContentPage_NavigatedTo(object sender, NavigatedToEventArgs e)
     {
+        //If we are adding a new ToDo, ToDoId will be 0 since viewModel has a ToDo with Id 0
+        //Otherwise, load the ToDo with the given ToDoId
         var viewModel = new ToDoViewModel();
         await viewModel.LoadAsync(ToDoId);
         BindingContext = viewModel;

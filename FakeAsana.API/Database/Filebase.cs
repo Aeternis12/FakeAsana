@@ -37,6 +37,7 @@ namespace Api.ToDoApplication.Persistence
             Directory.CreateDirectory(_projectRoot);
         }
 
+        //Gets the last ToDo Id for a specific project
         public int LastToDoKey(int projectId = 0)
         {
             var projectToDos = ToDos.Where(t => t.ProjectId == projectId);
@@ -47,6 +48,7 @@ namespace Api.ToDoApplication.Persistence
             return 0;
         }
 
+        //Gets the last Project Id from the file system
         public int LastProjectKey
         {
             get
@@ -58,6 +60,9 @@ namespace Api.ToDoApplication.Persistence
                 return 0;
             }
         }
+
+        //Gets all ToDos from the file system, reading from each project's ToDos directory
+        //Compiles the list of ALL ToDos across all projects
         public List<ToDo> ToDos
         {
             get
@@ -84,6 +89,8 @@ namespace Api.ToDoApplication.Persistence
             }
         }
 
+        //Gets all projects from the file system, reading from each project's project.json file
+        //Compiles the list of ALL projects
         public List<Project> Projects
         {
             get
@@ -109,27 +116,47 @@ namespace Api.ToDoApplication.Persistence
 
         public ToDo AddOrUpdateToDo(ToDo toDo)
         {
-            //set up a new Id if one doesn't already exist
+            //Find if the ToDo already exists
+            //If the ToDo exists and the ProjectId has changed, delete the old file
+            //Also check if the new Project already has a ToDo with this Id and if so, assign a new Id
+            var existingToDo = ToDos.FirstOrDefault(t => t.Id == toDo.Id);
+            if (existingToDo != null && existingToDo.ProjectId != toDo.ProjectId)
+            {
+                string oldToDoPath = $"{_projectRoot}\\Project_{existingToDo.ProjectId}\\ToDos\\{toDo.Id}.json";
+                if (File.Exists(oldToDoPath))
+                {
+                    File.Delete(oldToDoPath);
+                    var oldProject = Projects.FirstOrDefault(p => p.Id == existingToDo.ProjectId);
+                    UpdateProjectCompletePercentage(oldProject);
+                }
+
+                //Check if the target project already has a ToDo with this Id
+                string newToDoPath = $"{_projectRoot}\\Project_{toDo.ProjectId}\\ToDos\\{toDo.Id}.json";
+                if (File.Exists(newToDoPath))
+                {
+                    //Assign a new unique Id for the target project
+                    toDo.Id = LastToDoKey(toDo.ProjectId) + 1;
+                }
+            }
+
+
+
+
+            //Set up a new Id if one doesn't already exist
             if (toDo.Id <= 0)
             {
                 toDo.Id = LastToDoKey(toDo.ProjectId) + 1;
             }
-
-            //find the project that the ToDo will belong to
+            //Find the project that the ToDo will belong to
             var project = Projects.FirstOrDefault(p => p.Id == toDo.ProjectId);
 
-            string toDoName = toDo.Name ?? $"ToDo {toDo.Id}";
             string toDoPath = $"{_projectRoot}\\Project_{project.Id}\\ToDos";
-
-            //go to the right place
             string path = $"{toDoPath}\\{toDo.Id}.json";
 
-            //write the file
+            //Write the file
             File.WriteAllText(path, JsonConvert.SerializeObject(toDo));
             UpdateProjectCompletePercentage(project);
 
-
-            //return the item, which now has an id
             return toDo;
         }
 
@@ -160,6 +187,8 @@ namespace Api.ToDoApplication.Persistence
 
         public List<Project>? GetProjects(bool Expand = false)
         {
+            //if the user wants to expand the projects, we add the ToDos to each project
+            //Done so that the ToDos are not loaded into memory unless needed
             if (Expand)
             {
                 var projectList = new List<Project>();
@@ -174,7 +203,7 @@ namespace Api.ToDoApplication.Persistence
             return Projects;
         }
 
-
+        //Delete the project, removing its directory and all files within it recursively
         public void DeleteProject(Project? project)
         {
             if (project == null)
@@ -189,6 +218,8 @@ namespace Api.ToDoApplication.Persistence
             }
         }
 
+        //Delete the ToDo, removing its file from the file system
+        //Also updates the complete percentage of the project it belonged to
         public void DeleteToDo(ToDo? toDo)
         {
             if (toDo == null)
@@ -197,19 +228,22 @@ namespace Api.ToDoApplication.Persistence
             }
             var project = Projects.FirstOrDefault(p => p.Id == toDo.ProjectId);
 
-            string toDoName = toDo.Name ?? $"ToDo {toDo.Id}";
-            string toDoPath = $"{_projectRoot}\\{project.Name}\\ToDos";
+            string toDoPath = $"{_projectRoot}\\Project_{project.Id}\\ToDos";
 
             string path = $"{toDoPath}\\{toDo.Id}.json";
+            
+            if (File.Exists(path))
+            {
+                File.Delete(path);
+            }
 
-            File.Delete(path);
-
-                        UpdateProjectCompletePercentage(project);
+            UpdateProjectCompletePercentage(project);
 
 
         }
 
-
+        //Updates the complete percentage of the project
+        //Counts completed ToDos and divides by total ToDos in the project
         public void UpdateProjectCompletePercentage(Project project)
         {
             if (project == null) return;
@@ -227,7 +261,8 @@ namespace Api.ToDoApplication.Persistence
                 project.CompletePercent = Math.Round(completedToDos / (double)projectToDos.Count * 100, 2);
             }
 
-            //makes sure that the files are updated
+            //Updates the project file with the new complete percentage
+            //Needed because the .json file is not automatically updated
             string projectPath = $"{_projectRoot}\\Project_{project.Id}\\project.json";
             File.WriteAllText(projectPath, JsonConvert.SerializeObject(project));
         }
