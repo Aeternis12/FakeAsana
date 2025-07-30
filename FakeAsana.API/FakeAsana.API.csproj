@@ -11,7 +11,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\..\FakeAsana\Asana.Library\Asana.Library.csproj" />
+    <ProjectReference Include="..\Asana.Library\Asana.Library.csproj" />
   </ItemGroup>
 
 </Project>

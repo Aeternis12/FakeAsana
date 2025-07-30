@@ -119,7 +119,7 @@ namespace Api.ToDoApplication.Persistence
             var project = Projects.FirstOrDefault(p => p.Id == toDo.ProjectId);
 
             string toDoName = toDo.Name ?? $"ToDo {toDo.Id}";
-            string toDoPath = $"{_projectRoot}\\{project.Name}\\ToDos";
+            string toDoPath = $"{_projectRoot}\\Project_{project.Id}\\ToDos";
 
             //go to the right place
             string path = $"{toDoPath}\\{toDo.Id}.json";
@@ -228,7 +228,7 @@ namespace Api.ToDoApplication.Persistence
             }
 
             //makes sure that the files are updated
-            string projectPath = $"{_projectRoot}\\{project.Name}\\project.json";
+            string projectPath = $"{_projectRoot}\\Project_{project.Id}\\project.json";
             File.WriteAllText(projectPath, JsonConvert.SerializeObject(project));
         }
     }
