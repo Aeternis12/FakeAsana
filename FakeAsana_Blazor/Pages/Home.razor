@@ -40,7 +40,7 @@ Create/Manage Your Projects Here!
 }
 
 
-<div class="btn-group mt-3" role="group">
+<div class="btn-group mt-3">
     <button class="btn btn-success" @onclick="AddNewProjectClicked">Add New Project</button>
     <button class="btn btn-primary" @onclick="EditSelectedProjectClicked" disabled="@(selectedProject == null)">Edit Selected Project</button>
     <button class="btn btn-info" @onclick="ToDosInProjectClicked" disabled="@(selectedProject == null)">ToDos In Selected Project</button>
