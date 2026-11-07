@@ -1,12 +1,5 @@
-using Asana.API.Enterprise;
 using Asana.Library.Model;
 using Newtonsoft.Json;
-using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.IO;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace Api.ToDoApplication.Persistence
 {
@@ -15,7 +8,6 @@ namespace Api.ToDoApplication.Persistence
         private string _root;
         private string _projectRoot;
         private static Filebase _instance;
-
 
         public static Filebase Current
         {
@@ -32,7 +24,7 @@ namespace Api.ToDoApplication.Persistence
 
         private Filebase()
         {
-            _root = @"C:\temp";
+            _root = @"C:\Asana";
             _projectRoot = $"{_root}\\Projects";
             Directory.CreateDirectory(_projectRoot);
         }
@@ -83,7 +75,6 @@ namespace Api.ToDoApplication.Persistence
                             }
                         }
                     }
-
                 }
                 return _toDos;
             }
@@ -107,7 +98,6 @@ namespace Api.ToDoApplication.Persistence
                         {
                             _projects.Add(project);
                         }
-
                     }
                 }
                 return _projects;
@@ -138,9 +128,6 @@ namespace Api.ToDoApplication.Persistence
                     toDo.Id = LastToDoKey(toDo.ProjectId) + 1;
                 }
             }
-
-
-
 
             //Set up a new Id if one doesn't already exist
             if (toDo.Id <= 0)
@@ -183,7 +170,6 @@ namespace Api.ToDoApplication.Persistence
             //return the item, which now has an id
             return project;
         }
-
 
         public List<Project>? GetProjects(bool Expand = false)
         {
@@ -231,15 +217,13 @@ namespace Api.ToDoApplication.Persistence
             string toDoPath = $"{_projectRoot}\\Project_{project.Id}\\ToDos";
 
             string path = $"{toDoPath}\\{toDo.Id}.json";
-            
+
             if (File.Exists(path))
             {
                 File.Delete(path);
             }
 
             UpdateProjectCompletePercentage(project);
-
-
         }
 
         //Updates the complete percentage of the project
@@ -267,6 +251,4 @@ namespace Api.ToDoApplication.Persistence
             File.WriteAllText(projectPath, JsonConvert.SerializeObject(project));
         }
     }
-
-   
 }

@@ -1,77 +1,111 @@
 <?xml version="1.0" encoding="utf-8" ?>
-<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
-             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             x:Class="Asana.Maui.Views.ToDoDetailView"
-             Title="ToDoDetailView"
-             NavigatedFrom="ContentPage_NavigatedFrom"
-             NavigatedTo="ContentPage_NavigatedTo">
+<ContentPage
+    x:Class="Asana.Maui.Views.ToDoDetailView"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    Title="ToDoDetailView"
+    NavigatedFrom="ContentPage_NavigatedFrom"
+    NavigatedTo="ContentPage_NavigatedTo">
     <VerticalStackLayout>
         <Grid>
             <Grid.ColumnDefinitions>
-                <ColumnDefinition/>
-                <ColumnDefinition Width="4*"/>
-                <ColumnDefinition Width="12*"/>
+                <ColumnDefinition />
+                <ColumnDefinition Width="4*" />
+                <ColumnDefinition Width="12*" />
             </Grid.ColumnDefinitions>
-            <Label Text="Project: " Grid.Column="0"/>
-            <Picker ItemsSource="{Binding Projects}"
-                    SelectedItem="{Binding SelectedProject}" Grid.Column="1"/>
+            <Label Grid.Column="0" Text="Project: " />
+            <Picker
+                Grid.Column="1"
+                ItemsSource="{Binding Projects}"
+                SelectedItem="{Binding SelectedProject}" />
         </Grid>
         <Grid>
             <Grid.ColumnDefinitions>
-                <ColumnDefinition/>
-                <ColumnDefinition Width="4*"/>
-                <ColumnDefinition Width="12*"/>
+                <ColumnDefinition />
+                <ColumnDefinition Width="4*" />
+                <ColumnDefinition Width="12*" />
             </Grid.ColumnDefinitions>
             <Grid.RowDefinitions>
-                <RowDefinition/>
-                <RowDefinition/>
+                <RowDefinition />
+                <RowDefinition />
             </Grid.RowDefinitions>
-            <Label Text="ID: " Grid.Column="0" Grid.Row="0"/>
-            <Entry Text="{Binding Model.Id}" Grid.Column="1" Grid.Row="0" IsReadOnly="True"/>
-            <Label Text="Name : " Grid.Column="0" Grid.Row="1"/>
-            <Entry Text="{Binding Model.Name}" Grid.Column="1" Grid.Row="1"/>
+            <Label
+                Grid.Row="0"
+                Grid.Column="0"
+                Text="ID: " />
+            <Entry
+                Grid.Row="0"
+                Grid.Column="1"
+                IsReadOnly="True"
+                Text="{Binding Model.Id}" />
+            <Label
+                Grid.Row="1"
+                Grid.Column="0"
+                Text="Name : " />
+            <Entry
+                Grid.Row="1"
+                Grid.Column="1"
+                Text="{Binding Model.Name}" />
         </Grid>
         <Grid>
             <Grid.ColumnDefinitions>
-                <ColumnDefinition/>
-                <ColumnDefinition Width="4*"/>
-                <ColumnDefinition Width="12*"/>
+                <ColumnDefinition />
+                <ColumnDefinition Width="4*" />
+                <ColumnDefinition Width="12*" />
             </Grid.ColumnDefinitions>
             <Grid.RowDefinitions>
-                <RowDefinition/>
-                <RowDefinition/>
+                <RowDefinition />
+                <RowDefinition />
             </Grid.RowDefinitions>
-            <Label Text="Description: " Grid.Column="0" Grid.Row="0"/>
-            <Entry Text="{Binding Model.Description}" Grid.Column="1" Grid.Row="0"/>
+            <Label
+                Grid.Row="0"
+                Grid.Column="0"
+                Text="Description: " />
+            <Entry
+                Grid.Row="0"
+                Grid.Column="1"
+                Text="{Binding Model.Description}" />
         </Grid>
         <Grid>
             <Grid.ColumnDefinitions>
-                <ColumnDefinition/>
-                <ColumnDefinition Width="4*"/>
-                <ColumnDefinition Width="12*"/>
+                <ColumnDefinition />
+                <ColumnDefinition Width="4*" />
+                <ColumnDefinition Width="12*" />
             </Grid.ColumnDefinitions>
             <Grid.RowDefinitions>
-                <RowDefinition/>
-                <RowDefinition/>
+                <RowDefinition />
+                <RowDefinition />
             </Grid.RowDefinitions>
-            <Label Text="Is ToDo Complete: " Grid.Column="0" Grid.Row="1"/>
-            <CheckBox IsChecked="{Binding Model.IsCompleted}" Grid.Column="1" Grid.Row="1"/>
-            <Label Text="Priority: " Grid.Column="0" Grid.Row="0"/>
-            <Picker ItemsSource="{Binding Priorities}"
-                    SelectedItem="{Binding SelectedPriority}" Grid.Column="1" Grid.Row="0"/>
+            <Label
+                Grid.Row="1"
+                Grid.Column="0"
+                Text="Is ToDo Complete: " />
+            <CheckBox
+                Grid.Row="1"
+                Grid.Column="1"
+                IsChecked="{Binding Model.IsCompleted}" />
+            <Label
+                Grid.Row="0"
+                Grid.Column="0"
+                Text="Priority: " />
+            <Picker
+                Grid.Row="0"
+                Grid.Column="1"
+                ItemsSource="{Binding Priorities}"
+                SelectedItem="{Binding SelectedPriority}" />
         </Grid>
         <Grid>
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="0.35*"/>
-                <ColumnDefinition Width=".6*"/>
-                <ColumnDefinition/>
-                <ColumnDefinition Width="4*"/>
+                <ColumnDefinition Width="0.35*" />
+                <ColumnDefinition Width=".6*" />
+                <ColumnDefinition />
+                <ColumnDefinition Width="4*" />
             </Grid.ColumnDefinitions>
-            <Label Text="Due Date: " Grid.Column="0"/>
-            <DatePicker Date="{Binding DueDate}" Grid.Column="1"/>
-            <TimePicker Time="{Binding DueTime}" Grid.Column="2"/>  
+            <Label Grid.Column="0" Text="Due Date: " />
+            <DatePicker Grid.Column="1" Date="{Binding DueDate}" />
+            <TimePicker Grid.Column="2" Time="{Binding DueTime}" />
         </Grid>
-        <Button Text="Ok" Clicked="OkClicked"/>
-        <Button Text="Cancel" Clicked="CancelClicked"/>
+        <Button Clicked="OkClicked" Text="Ok" />
+        <Button Clicked="CancelClicked" Text="Cancel" />
     </VerticalStackLayout>
 </ContentPage>

@@ -1,46 +1,58 @@
-﻿using Asana.API.Enterprise;
+﻿using FakeAsana.API.Enterprise;
 using Asana.Library.Model;
 using Microsoft.AspNetCore.Mvc;
 
-namespace Asana.API.Controllers
+namespace FakeAsana.API.Controllers
 {
     [ApiController]
     [Route("[controller]")]
-    public class ToDoController : ControllerBase
+    public class ToDoController
     {
+        private readonly IToDoEC _toDoEC;
+
+        public ToDoController(IToDoEC toDo)
+        {
+            _toDoEC = toDo;
+        }
+
         //Gets all ToDos from the EC, which reads from the file system
         [HttpGet]
-        public IEnumerable<ToDo> Get()
+        public async Task<IEnumerable<ToDo>> GetAsync()
         {
-            return new ToDoEC().GetToDos();
+            var result = await _toDoEC.GetAsync();
+            return result;
         }
 
         //Gets a ToDo by its Id from the EC, which reads from the file system
-        [HttpGet("{id}")]       
-        public ToDo? GetById(int id)
+        [HttpGet("{id}")]
+        public async Task<ToDo> GetByIdAsync(int id)
         {
-            return new ToDoEC().GetById(id);
+            var result = await _toDoEC.GetByIdAsync(id);
+            return result;
         }
 
         //Gets a ToDo by its ProjectId from the EC, which reads from the file system
         [HttpDelete("{id}")]
-        public ToDo? Delete(int id)
+        public async Task<ToDo> DeleteAsync(int id)
         {
-            return new ToDoEC().Delete(id);
+            var result = await _toDoEC.DeleteAsync(id);
+            return result;
         }
 
         //Adds or updates a ToDo in the EC, which writes to the file system
         [HttpPost]
-        public ToDo? AddOrUpdate([FromBody] ToDo? toDo)
+        public async Task<ToDo> AddOrUpdateAsync([FromBody] ToDo? toDo)
         {
-            return new ToDoEC().AddOrUpdate(toDo);
+            var result = await _toDoEC.AddOrUpdateAsync(toDo);
+            return result;
         }
 
         //Gets all ToDos for a specific project by its Id from the EC, which reads from the file system
         [HttpGet("Project/{id}")]
-        public IEnumerable<ToDo> GetByProjectId(int id)
+        public async Task<IEnumerable<ToDo>> GetByProjectIdAsync(int id)
         {
-            return new ToDoEC().GetByProjectId(id);
+            var result = await _toDoEC.GetByProjectIdAsync(id);
+            return result;
         }
     }
 }

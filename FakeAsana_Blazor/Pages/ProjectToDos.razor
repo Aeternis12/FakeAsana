@@ -5,12 +5,12 @@
 
 
 @page "/ProjectToDos/{ProjectId:int}"
-
+<PageTitle>Project ToDos</PageTitle>
 
 <h3>Project ToDos</h3>
 
 <label>
-    <input type="checkbox" @bind="showCompleted" /> Show completed ToDos
+    <input type="checkbox" @bind="showCompleted">Show completed ToDos</input>
 </label>
 
 <table class="table table-striped mt-3">

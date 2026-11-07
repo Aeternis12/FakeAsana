@@ -1,40 +1,48 @@
-﻿using Api.ToDoApplication.Persistence;
-using Asana.Library.Model;
+﻿using Asana.Library.Model;
+using FakeAsana.API.Database;
 
-namespace Asana.API.Enterprise
+namespace FakeAsana.API.Enterprise
 {
-    public class ProjectEC
+    public class ProjectEC : IProjectEC
     {
-        //Gets the list of projects from file, optionally expanding the ToDos for each project
-        public IEnumerable<Project>? Get(bool Expand = false)
+        private readonly IDataBaseService _db;
+
+        public ProjectEC(IDataBaseService db)
         {
-            return Filebase.Current.GetProjects(Expand)?.Take(100);
+            _db = db;
+        }
+
+        //Gets the list of projects from file, optionally expanding the ToDos for each project
+        public async Task<IEnumerable<Project>> GetAsync(bool Expand = false)
+        {
+            var projects = await _db.GetProjectsAsync(Expand);
+            return projects.Take(100);
         }
 
         //Gets the a specific project by its Id from file, including its ToDos
-        public Project? GetById(int id)
+        public async Task<Project> GetByIdAsync(int id)
         {
-            return Filebase.Current.GetProjects(true)?.FirstOrDefault(p => p.Id == id);
+            var project = await _db.GetProjectsAsync(true);
+            return project.FirstOrDefault(p => p.Id == id);
         }
 
         //Adds or updates a project in the file system
-        public Project? AddOrUpdate(Project? project)
+        public async Task<Project> AddOrUpdateAsync(Project? project)
         {
-            if(project == null)
+            if (project != null)
             {
-                return project;
+                await _db.AddOrUpdateProjectAsync(project);
             }
-            Filebase.Current.AddOrUpdateProject(project);
             return project;
         }
 
         //Deletes a project by its Id from the file system
-        public Project? Delete(int id)
+        public async Task<Project> DeleteAsync(int id)
         {
-            var projectToDelete = GetById(id);
+            var projectToDelete = await GetByIdAsync(id);
             if (projectToDelete != null)
             {
-                Filebase.Current.DeleteProject(projectToDelete);
+                await _db.DeleteProjectAsync(projectToDelete);
             }
             return projectToDelete;
         }

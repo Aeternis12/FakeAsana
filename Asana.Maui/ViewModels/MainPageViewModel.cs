@@ -1,10 +1,7 @@
-﻿using Asana.Library.Model;
-using Asana.Library.Services;
+﻿using Asana.Library.Services;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
-using System.Linq;
 using System.Runtime.CompilerServices;
-using System.Threading.Tasks;
 
 namespace Asana.Maui.ViewModels
 {
@@ -20,12 +17,12 @@ namespace Asana.Maui.ViewModels
         private ProjectViewModel? _selectedProject;
 
         //Public property to get/set the selected project
-        public ProjectViewModel? SelectedProject 
+        public ProjectViewModel? SelectedProject
         {
             get
             {
                 return _selectedProject;
-            } 
+            }
             set
             {
                 if (_selectedProject != value)
@@ -49,12 +46,12 @@ namespace Asana.Maui.ViewModels
         }
 
         //Checks to see if project is selected for button enabling
-        public bool IsProjectSelected 
+        public bool IsProjectSelected
         {
             get
             {
                 return SelectedProject != null;
-            } 
+            }
         }
 
         //Constructor initializes the project service and loads the projects into the ObservableCollection
@@ -74,7 +71,7 @@ namespace Asana.Maui.ViewModels
                 Projects.Add(new ProjectViewModel(project));
             }
             SelectedProject = null; //Clear the selected project after loading
-            NotifyPropertyChanged(nameof(SelectedProject)); 
+            NotifyPropertyChanged(nameof(SelectedProject));
             //Updates observable colletion
             NotifyPropertyChanged(nameof(Projects));
         }

@@ -5,6 +5,7 @@
 
 @page "/ProjectDetails"
 @page "/ProjectDetails/{ProjectId:int?}"
+<PageTitle>Project Details</PageTitle>
 
 <h3>Project Details</h3>
 
@@ -35,11 +36,7 @@
     {
         if (ProjectId.HasValue)
         {
-            project = await ProjectSvc.GetById(ProjectId.Value);
-            if (project == null)
-            {
-                project = new Project();
-            }
+            project = await ProjectSvc.GetById(ProjectId.Value) ?? new Project();
         }
         else
         {

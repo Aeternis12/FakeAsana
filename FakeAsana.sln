@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Version 17
-VisualStudioVersion = 17.14.36221.1
+# Visual Studio Version 18
+VisualStudioVersion = 18.11.12306.390 stable
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Asana.Maui", "Asana.Maui\Asana.Maui.csproj", "{38E46E32-CC95-C46C-ACED-DD29E404013A}"
 EndProject
@@ -12,6 +12,8 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FakeAsana_Blazor", "FakeAsana_Blazor\FakeAsana_Blazor.csproj", "{36B1702B-372A-3EC6-615E-7A2A171417E2}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FakeAsana.API", "FakeAsana.API\FakeAsana.API.csproj", "{D89BA5B2-CBEC-FBDE-2F7A-773ECA1DD879}"
+EndProject
+Project("{00D1A9C2-B5F0-4AF3-8072-F6C62B433612}") = "Asana.Database", "Asana.Database\Asana.Database.sqlproj", "{97628993-5A86-4CD0-B1DB-403BF86B8490}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -39,6 +41,12 @@ Global
 		{D89BA5B2-CBEC-FBDE-2F7A-773ECA1DD879}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D89BA5B2-CBEC-FBDE-2F7A-773ECA1DD879}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D89BA5B2-CBEC-FBDE-2F7A-773ECA1DD879}.Release|Any CPU.Build.0 = Release|Any CPU
+		{97628993-5A86-4CD0-B1DB-403BF86B8490}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{97628993-5A86-4CD0-B1DB-403BF86B8490}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{97628993-5A86-4CD0-B1DB-403BF86B8490}.Debug|Any CPU.Deploy.0 = Debug|Any CPU
+		{97628993-5A86-4CD0-B1DB-403BF86B8490}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{97628993-5A86-4CD0-B1DB-403BF86B8490}.Release|Any CPU.Build.0 = Release|Any CPU
+		{97628993-5A86-4CD0-B1DB-403BF86B8490}.Release|Any CPU.Deploy.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

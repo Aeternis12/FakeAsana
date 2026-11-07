@@ -11,14 +11,24 @@ namespace FakeAsana_Blazor.Services
 {
     public class ToDoServiceProxy : IToDoService
     {
-        private readonly WebRequestHandler _webRequestHandler = new WebRequestHandler();
+        private readonly WebRequestHandler _webRequestHandler;
 
-        public ToDoServiceProxy() { }
+        public ToDoServiceProxy(WebRequestHandler webRequestHandler)
+        {
+            _webRequestHandler = webRequestHandler;
+            _toDos = new List<ToDo>();
+
+        }
+
+        private List<ToDo> _toDos = new List<ToDo>();
+
+        public List<ToDo> ToDos { get; private set; } = new List<ToDo>();
 
         public async Task<List<ToDo>> GetToDos()
         {
             var todoData = await _webRequestHandler.Get("/ToDo");
-            return JsonConvert.DeserializeObject<List<ToDo>>(todoData) ?? new List<ToDo>();
+            _toDos = JsonConvert.DeserializeObject<List<ToDo>>(todoData) ?? new List<ToDo>();
+            return _toDos;
         }
 
         public async Task<ToDo?> GetById(int id)

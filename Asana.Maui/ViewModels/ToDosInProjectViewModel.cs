@@ -1,9 +1,7 @@
-﻿using Asana.Library.Model;
-using Asana.Library.Services;
+﻿using Asana.Library.Services;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
-using System.Threading.Tasks;
 
 namespace Asana.Maui.ViewModels
 {
@@ -16,7 +14,7 @@ namespace Asana.Maui.ViewModels
         private ToDoViewModel? _selectedToDo;
 
         //Public property to get/set the selected ToDo
-        public ToDoViewModel? SelectedToDo 
+        public ToDoViewModel? SelectedToDo
         {
             get
             {
@@ -24,7 +22,7 @@ namespace Asana.Maui.ViewModels
             }
             set
             {
-                if(SelectedToDo != value)
+                if (SelectedToDo != value)
                 {
                     _selectedToDo = value;
                     NotifyPropertyChanged(nameof(SelectedToDo));
@@ -33,7 +31,7 @@ namespace Asana.Maui.ViewModels
                 }
             }
         }
-        public int? SelectedToDoId  
+        public int? SelectedToDoId
         {
             get
             {
@@ -63,7 +61,7 @@ namespace Asana.Maui.ViewModels
                 if (_isShowCompleted != value)
                 {
                     _isShowCompleted = value;
-                    _ = LoadToDosAsync(); 
+                    _ = LoadToDosAsync();
                 }
             }
         }

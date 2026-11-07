@@ -1,3 +1,6 @@
+using FakeAsana.API.Database;
+using FakeAsana.API.Enterprise;
+
 namespace FakeAsana.API
 {
     public class Program
@@ -9,16 +12,22 @@ namespace FakeAsana.API
             // Add services to the container.
 
             builder.Services.AddControllers();
+            builder.Services.AddScoped<IDataBaseService, DatabaseService>();
+            builder.Services.AddScoped<IProjectEC, ProjectEC>();
+            builder.Services.AddScoped<IToDoEC, ToDoEC>();
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
-
             builder.Services.AddCors(options =>
             {
                 options.AddPolicy("AllowBlazorClient",
                     policy =>
                     {
-                        policy.WithOrigins("http://localhost:5108")
+                        policy.WithOrigins(
+                                "http://localhost:15276",
+                                "https://localhost:15276",
+                                "http://localhost:5200",
+                                "https://localhost:7200")
                               .AllowAnyHeader()
                               .AllowAnyMethod();
                     });
@@ -35,9 +44,9 @@ namespace FakeAsana.API
 
             app.UseHttpsRedirection();
 
-            app.UseAuthorization();
-
             app.UseCors("AllowBlazorClient");
+
+            app.UseAuthorization();
 
             app.MapControllers();
 

@@ -6,8 +6,13 @@ namespace FakeAsana_Blazor.Services
 {
     public class ProjectServiceProxy : IProjectService
     {
-        private readonly WebRequestHandler _webRequestHandler = new WebRequestHandler();
+        private readonly WebRequestHandler _webRequestHandler;
+        public ProjectServiceProxy(WebRequestHandler webRequestHandler)
+        {
+            _webRequestHandler = webRequestHandler;
+            _projects = new List<Project>();
 
+        }
 
         public List<Project> Projects
         {
@@ -19,10 +24,6 @@ namespace FakeAsana_Blazor.Services
 
         private List<Project> _projects;
 
-        public ProjectServiceProxy()
-        {
-            _projects = new List<Project>();
-        }
 
         public async Task<List<Project>> GetProjects()
         {

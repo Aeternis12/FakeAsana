@@ -1,12 +1,6 @@
 ﻿using Asana.Library.Model;
 using Asana.Library.Util;
 using Newtonsoft.Json;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Xml.Linq;
 
 namespace Asana.Library.Services
 {
@@ -50,6 +44,7 @@ namespace Asana.Library.Services
         {
             _projects = new List<Project>();
         }
+
 
         //Method to retrieve all projects from the API
         public async Task<List<Project>> GetProjects()

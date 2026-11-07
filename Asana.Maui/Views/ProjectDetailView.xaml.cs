@@ -1,4 +1,3 @@
-using Asana.Library.Model;
 using Asana.Maui.ViewModels;
 
 namespace Asana.Maui.Views;
@@ -6,13 +5,13 @@ namespace Asana.Maui.Views;
 [QueryProperty(nameof(ProjectId), "projectId")]
 public partial class ProjectDetailView : ContentPage
 {
-	public ProjectDetailView()
-	{
-		InitializeComponent();
-	}
+    public ProjectDetailView()
+    {
+        InitializeComponent();
+    }
 
     public int ProjectId { get; set; }
-    private  void OkClicked(object sender, EventArgs e)
+    private void OkClicked(object sender, EventArgs e)
     {
         //If we are adding a new projects, contexty will have a project with Id 0
         (BindingContext as ProjectViewModel)?.AddOrUpdateProject();

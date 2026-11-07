@@ -8,5 +8,6 @@ namespace FakeAsana_Blazor.Services
         Task<Project?> GetById(int id);
         Task<Project?> AddOrUpdate(Project? project);
         Task DeleteProject(int id);
+
     }
 }

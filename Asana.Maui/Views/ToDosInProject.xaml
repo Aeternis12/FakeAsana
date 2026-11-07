@@ -1,28 +1,32 @@
 <?xml version="1.0" encoding="utf-8" ?>
-<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
-             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             x:Class="Asana.Maui.Views.ToDosInProject"
-             NavigatedTo="ContentPage_NavigatedTo"
-             NavigatedFrom="ContentPage_NavigatedFrom">
+<ContentPage
+    x:Class="Asana.Maui.Views.ToDosInProject"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    NavigatedFrom="ContentPage_NavigatedFrom"
+    NavigatedTo="ContentPage_NavigatedTo">
 
     <ScrollView>
         <VerticalStackLayout Padding="30,0" Spacing="25">
             <Grid>
                 <Grid.RowDefinitions>
-                    <RowDefinition/>
-                    <RowDefinition Height="10*"/>
-                    <RowDefinition Height="10*"/>
+                    <RowDefinition />
+                    <RowDefinition Height="10*" />
+                    <RowDefinition Height="10*" />
                 </Grid.RowDefinitions>
-                <!-- Tool Bar -->
+                <!--  Tool Bar  -->
                 <Grid Grid.Row="0">
                     <Grid.ColumnDefinitions>
-                        <ColumnDefinition/>
-                        <ColumnDefinition Width="11*"/>
+                        <ColumnDefinition />
+                        <ColumnDefinition Width="11*" />
                     </Grid.ColumnDefinitions>
-                    <Label Grid.Column="0" Text="Show Completed Tasks:"/>
-                    <CheckBox Margin="5" Grid.Column="1" IsChecked="{Binding IsShowCompleted}" />
+                    <Label Grid.Column="0" Text="Show Completed Tasks:" />
+                    <CheckBox
+                        Grid.Column="1"
+                        Margin="5"
+                        IsChecked="{Binding IsShowCompleted}" />
                 </Grid>
-                <!-- ToDo List -->
+                <!--  ToDo List  -->
                 <ListView
                     Grid.Row="1"
                     ItemsSource="{Binding ToDos}"
@@ -32,37 +36,61 @@
                             <ViewCell>
                                 <Grid>
                                     <Grid.ColumnDefinitions>
-                                        <ColumnDefinition/>
-                                        <ColumnDefinition Width="5*"/>
-                                        <ColumnDefinition/>
+                                        <ColumnDefinition />
+                                        <ColumnDefinition Width="5*" />
+                                        <ColumnDefinition />
                                     </Grid.ColumnDefinitions>
                                     <Grid Grid.Column="1">
                                         <Grid.ColumnDefinitions>
-                                            <ColumnDefinition/>
-                                            <ColumnDefinition Width="12*"/>
+                                            <ColumnDefinition />
+                                            <ColumnDefinition Width="12*" />
                                         </Grid.ColumnDefinitions>
                                         <Grid.RowDefinitions>
-                                            <RowDefinition/>
-                                            <RowDefinition/>
-                                            <RowDefinition/>
+                                            <RowDefinition />
+                                            <RowDefinition />
+                                            <RowDefinition />
                                         </Grid.RowDefinitions>
-                                        <Label Grid.Column="0" TextColor="Red" FontAttributes="Bold" Grid.Row="0" Text="{Binding Model.Name}"/>
-                                        <Label Grid.Column="0" Grid.Row="1" Text="{Binding Model.Description}"/>
-                                        <Label Grid.Column="0" Grid.Row="2" Text="Due: "/>
-                                        <Label Grid.Column="1" Grid.Row="2" Text="{Binding Model.DueDate}"/>
+                                        <Label
+                                            Grid.Row="0"
+                                            Grid.Column="0"
+                                            FontAttributes="Bold"
+                                            Text="{Binding Model.Name}"
+                                            TextColor="Red" />
+                                        <Label
+                                            Grid.Row="1"
+                                            Grid.Column="0"
+                                            Text="{Binding Model.Description}" />
+                                        <Label
+                                            Grid.Row="2"
+                                            Grid.Column="0"
+                                            Text="Due: " />
+                                        <Label
+                                            Grid.Row="2"
+                                            Grid.Column="1"
+                                            Text="{Binding Model.DueDate}" />
                                     </Grid>
-                                    <Button Grid.Column="2" Text="Delete" Clicked="InLineDeleteClicked" Command="{Binding DeleteCommand}"/>
+                                    <Button
+                                        Grid.Column="2"
+                                        Clicked="InLineDeleteClicked"
+                                        Command="{Binding DeleteCommand}"
+                                        Text="Delete" />
                                 </Grid>
                             </ViewCell>
                         </DataTemplate>
                     </ListView.ItemTemplate>
                 </ListView>
-                <!-- Button Bar -->
+                <!--  Button Bar  -->
                 <VerticalStackLayout Grid.Row="2">
-                    <Button Text="Add New ToDo" Clicked="AddNewClicked"/>
-                    <Button Text="Edit Selected ToDo" IsEnabled="{Binding IsToDoSelected}" Clicked="EditClicked"/>
-                    <Button Text="Delete Selected ToDo" IsEnabled="{Binding IsToDoSelected}" Clicked="DeleteClicked"/>
-                    <Button Text="Cancel" Clicked="CancelClicked"/>
+                    <Button Clicked="AddNewClicked" Text="Add New ToDo" />
+                    <Button
+                        Clicked="EditClicked"
+                        IsEnabled="{Binding IsToDoSelected}"
+                        Text="Edit Selected ToDo" />
+                    <Button
+                        Clicked="DeleteClicked"
+                        IsEnabled="{Binding IsToDoSelected}"
+                        Text="Delete Selected ToDo" />
+                    <Button Clicked="CancelClicked" Text="Cancel" />
                 </VerticalStackLayout>
             </Grid>
         </VerticalStackLayout>

@@ -1,56 +1,76 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
-<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
-             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             x:Class="Asana.Maui.MainPage"
-             Title="Projects"
-             NavigatedFrom="ContentPage_NavigatedFrom"
-             NavigatedTo="ContentPage_NavigatedTo"
-             >
-    <VerticalStackLayout
-        Padding="30,0"
-        Spacing="25">
+<ContentPage
+    x:Class="Asana.Maui.MainPage"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    Title="Projects"
+    NavigatedFrom="ContentPage_NavigatedFrom"
+    NavigatedTo="ContentPage_NavigatedTo">
+    <VerticalStackLayout Padding="30,0" Spacing="25">
         <Grid>
             <Grid.RowDefinitions>
-                <RowDefinition Height="Auto"/>
-                <RowDefinition Height="*"/>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="*" />
             </Grid.RowDefinitions>
-            <!-- Project List -->
+            <!--  Project List  -->
             <ListView
-                    Grid.Row="0"
-                    ItemsSource="{Binding Projects}"
-                    SelectedItem="{Binding SelectedProject}">
+                Grid.Row="0"
+                ItemsSource="{Binding Projects}"
+                SelectedItem="{Binding SelectedProject}">
                 <ListView.ItemTemplate>
                     <DataTemplate>
                         <ViewCell>
                             <Grid>
                                 <Grid.ColumnDefinitions>
-                                    <ColumnDefinition/>
-                                    <ColumnDefinition/>
-                                    <ColumnDefinition Width="10*"/>
-                                    <ColumnDefinition/>
+                                    <ColumnDefinition />
+                                    <ColumnDefinition />
+                                    <ColumnDefinition Width="10*" />
+                                    <ColumnDefinition />
                                 </Grid.ColumnDefinitions>
-                                <Label Grid.Column="0" Text="{Binding Model.Id}"/>
+                                <Label Grid.Column="0" Text="{Binding Model.Id}" />
                                 <Grid Grid.Column="1">
                                     <Grid.RowDefinitions>
-                                        <RowDefinition/>
-                                        <RowDefinition/>
-                                        <RowDefinition/>
+                                        <RowDefinition />
+                                        <RowDefinition />
+                                        <RowDefinition />
                                     </Grid.RowDefinitions>
-                                    <Label FontAttributes="Bold" FontSize="Title" TextColor="Green" Grid.Row="0" Text="{Binding Model.Name}"/>
-                                    <Label Grid.Row="1" Text="{Binding Model.Description}"/>
+                                    <Label
+                                        Grid.Row="0"
+                                        FontAttributes="Bold"
+                                        FontSize="Title"
+                                        Text="{Binding Model.Name}"
+                                        TextColor="Green" />
+                                    <Label Grid.Row="1" Text="{Binding Model.Description}" />
                                 </Grid>
-                                <Label Grid.Column="2"  TextColor="Red" FontSize="Title" Text="{Binding Model.CompletePercent, StringFormat='{}{0} %'}"/>
-                                <Button Grid.Column="3" Text="Delete" Clicked="InLineDeleteClicked" Command="{Binding DeleteCommand} "/>
+                                <Label
+                                    Grid.Column="2"
+                                    FontSize="Title"
+                                    Text="{Binding Model.CompletePercent, StringFormat='{}{0} %'}"
+                                    TextColor="Red" />
+                                <Button
+                                    Grid.Column="3"
+                                    Clicked="InLineDeleteClicked"
+                                    Command="{Binding DeleteCommand}"
+                                    Text="Delete" />
                             </Grid>
                         </ViewCell>
                     </DataTemplate>
                 </ListView.ItemTemplate>
             </ListView>
             <VerticalStackLayout Grid.Row="1">
-                <Button Text="Add New Project" Clicked="AddClicked"/>
-                <Button Text="Edit Selected Project" IsEnabled="{Binding IsProjectSelected}" Clicked="EditClicked"/>
-                <Button Text="Delete Selected Project" IsEnabled="{Binding IsProjectSelected}" Clicked="DeleteClicked"/>
-                <Button Text="Manage ToDos In Project" IsEnabled="{Binding IsProjectSelected}" Clicked="ToDosInProjectClicked"/>
+                <Button Clicked="AddClicked" Text="Add New Project" />
+                <Button
+                    Clicked="EditClicked"
+                    IsEnabled="{Binding IsProjectSelected}"
+                    Text="Edit Selected Project" />
+                <Button
+                    Clicked="DeleteClicked"
+                    IsEnabled="{Binding IsProjectSelected}"
+                    Text="Delete Selected Project" />
+                <Button
+                    Clicked="ToDosInProjectClicked"
+                    IsEnabled="{Binding IsProjectSelected}"
+                    Text="Manage ToDos In Project" />
             </VerticalStackLayout>
         </Grid>
     </VerticalStackLayout>

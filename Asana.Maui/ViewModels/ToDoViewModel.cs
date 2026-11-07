@@ -1,10 +1,6 @@
 ﻿using Asana.Library.Model;
 using Asana.Library.Services;
-using System;
-using System.Collections.Generic;
 using System.ComponentModel;
-using System.Linq;
-using System.Threading.Tasks;
 using System.Windows.Input;
 
 namespace Asana.Maui.ViewModels
@@ -17,7 +13,7 @@ namespace Asana.Maui.ViewModels
         {
             get
             {
-               return new List<int> { 1, 2, 3, 4 };
+                return new List<int> { 1, 2, 3, 4 };
             }
         }
 
